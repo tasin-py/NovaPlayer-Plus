@@ -193,6 +193,8 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
     private CursorObjectAdapter mLastPlayedAdapter;
     private ArrayObjectAdapter mFileBrowsingRowAdapter;
     private ArrayObjectAdapter mPreferencesRowAdapter;
+    // NovaPlayer Prime: refresh the red dot on the Settings icon when an update is found
+    private final com.archos.mediacenter.video.prime.update.PrimeUpdater.Listener mPrimeUpdateListener = u -> refreshPrimeUpdateBadge();
     private final Handler mRowsSelectionHandler = new Handler(Looper.getMainLooper());
     private Object mRowPendingSelection;
     private final Runnable mClearRowPendingSelection = () -> mRowPendingSelection = null;
@@ -432,6 +434,13 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
         mOverlay.resume();
         updateBackground();
 
+        // NovaPlayer Prime: background update check (at most every 6 hours) + badge refresh
+        com.archos.mediacenter.video.prime.update.PrimeUpdater primeUpdater =
+                com.archos.mediacenter.video.prime.update.PrimeUpdater.get(mActivity != null ? mActivity : requireContext());
+        primeUpdater.addListener(mPrimeUpdateListener);
+        refreshPrimeUpdateBadge();
+        primeUpdater.checkIfDue();
+
         // Update storage visibility to reflect current mount state
         // This ensures unmounted drives don't show icons when returning from background
         updateUsbAndSdcardVisibility();
@@ -634,6 +643,7 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
     public void onPause() {
         super.onPause();
         mOverlay.pause();
+        com.archos.mediacenter.video.prime.update.PrimeUpdater.get(requireContext()).removeListener(mPrimeUpdateListener);
         mScannerBoxRefreshHandler.removeCallbacks(mRefreshBoxesAfterScannerQuietPeriod);
 
         // be sure to reload loaders and iconBoxes in onResume after an onPause
@@ -652,6 +662,18 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
             mActivity.unregisterReceiver(mUpdateReceiver);
         } catch(IllegalArgumentException | NullPointerException e) { // EntryActivity could have been destroyed
             log.warn("onDetach: trying to unregister mUpdateReceiver or mExternalStorageReceiver which is not registered or EntryActivity destroyed!");
+        }
+    }
+
+    /** NovaPlayer Prime: redraw the Settings icon so its update dot matches the updater state. */
+    private void refreshPrimeUpdateBadge() {
+        if (mPreferencesRowAdapter == null) return;
+        for (int i = 0; i < mPreferencesRowAdapter.size(); i++) {
+            Object o = mPreferencesRowAdapter.get(i);
+            if (o instanceof Icon && ((Icon) o).getId() == Icon.ID.PREFERENCES) {
+                mPreferencesRowAdapter.notifyArrayItemRangeChanged(i, 1);
+                return;
+            }
         }
     }
 

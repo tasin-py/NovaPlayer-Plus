@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NovaPlayer Prime strings (fork of NOVA Video Player, customized by tasin-py) -->
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="prime_app_name" translatable="false">NovaPlayer Prime</string>
+    <string name="prime_close">Close</string>
+
+    <!-- Stream -->
+    <string name="prime_stream">Stream</string>
+    <string name="prime_stream_description">Play a video straight from a link: direct http(s) files (mkv, mp4…), HLS (.m3u8), DASH, rtsp/rtmp, and Google Drive, Dropbox or OneDrive share links.</string>
+    <string name="prime_stream_link">Link</string>
+    <string name="prime_stream_hint">Type or paste a link</string>
+    <string name="prime_stream_paste">Paste</string>
+    <string name="prime_stream_paste_description">Put the copied link in the box</string>
+    <string name="prime_stream_play">Play</string>
+    <string name="prime_stream_history">Recent streams</string>
+    <string name="prime_stream_history_description">Kept for 30 days</string>
+    <string name="prime_stream_clear_history">Clear history</string>
+    <string name="prime_stream_clipboard_empty">Nothing to paste: the clipboard is empty</string>
+    <string name="prime_stream_invalid">This does not look like a video link</string>
+    <string name="prime_stream_folder">This link is a folder. Open the folder in a browser and copy the link of the video file itself.</string>
+
+    <!-- Credits and support -->
+    <string name="prime_credits_title">NovaPlayer Prime by tasin-py</string>
+    <string name="prime_credits_summary">Based on NOVA Video Player by the NOVA developers (Courville Software and contributors), itself derived from Archos Video Player. Forked and customized by tasin-py · github.com/tasin-py</string>
+    <string name="prime_support_title">Support tasin-py</string>
+    <string name="prime_support_summary">Socials and Buy me a coffee</string>
+    <string name="prime_support_intro">Thanks for using NovaPlayer Prime! Follow me or buy me a coffee:</string>
+    <string name="prime_support_coffee">Buy me a coffee</string>
+    <string name="prime_support_qr_description">QR code for the support page</string>
+    <string name="prime_support_qr_hint">Scan with your phone, or open the link below</string>
+    <string name="prime_support_nova_title">Support the original NOVA developers</string>
+    <string name="prime_support_nova_summary">NOVA Video Player is the open-source project this app is built on</string>
+
+    <!-- Updates -->
+    <string name="prime_update_check">Check for updates</string>
+    <string name="prime_update_now">Update now</string>
+    <string name="prime_update_current">Installed version: %1$s</string>
+    <string name="prime_update_checking">Checking GitHub for updates…</string>
+    <string name="prime_update_up_to_date">You have the latest version</string>
+    <string name="prime_update_available">New version available: %1$s. Click to update.</string>
+    <string name="prime_update_downloading">Downloading update… %1$d%%</string>
+    <string name="prime_update_installing">Installing update… the app will close, then open it again</string>
+    <string name="prime_update_failed">Update check failed (%1$s). Click to try again.</string>
+    <string name="prime_update_failed_retry">Update failed (%1$s). Click to try again.</string>
+</resources>

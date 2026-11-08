@@ -866,6 +866,8 @@ public class VideoPreferencesCommon implements OnSharedPreferenceChangeListener 
         resetPassthroughPref(mSharedPreferences);
 
         addPreferencesFromResource(R.xml.preferences_video);
+        // NovaPlayer Prime: credits, support and update checker entries
+        com.archos.mediacenter.video.prime.PrimePreferences.attach(mPreferencesFragment);
 
         TorrentPathDialogPreference torrentPref =
                 (TorrentPathDialogPreference) findPreference(KEY_TORRENT_PATH);

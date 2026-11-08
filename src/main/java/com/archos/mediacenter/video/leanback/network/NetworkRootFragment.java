@@ -71,6 +71,8 @@ import com.archos.mediacenter.video.leanback.presenter.NetworkShortcutPresenter;
 import com.archos.mediacenter.video.leanback.presenter.RescanBoxItemPresenter;
 import com.archos.mediacenter.video.leanback.presenter.SmbSharePresenter;
 import com.archos.mediacenter.video.player.PrivateMode;
+import com.archos.mediacenter.video.prime.stream.StreamActivity;
+import com.archos.mediacenter.video.prime.stream.StreamShortcut;
 import com.archos.mediacenter.video.utils.PrivateModeUIHelper;
 import com.archos.mediaprovider.video.NetworkScannerReceiver;
 
@@ -298,7 +300,10 @@ public class NetworkRootFragment extends BrowseSupportFragment {
     OnItemViewClickedListener mClickListener = new OnItemViewClickedListener() {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
-            if (item instanceof GenericNetworkShortcut) { // network shortcuts are for now only *ftp*
+            if (item instanceof StreamShortcut) { // NovaPlayer Prime: open the Stream screen
+                startActivity(new Intent(getActivity(), StreamActivity.class));
+            }
+            else if (item instanceof GenericNetworkShortcut) { // network shortcuts are for now only *ftp*
                 if (log.isDebugEnabled()) log.debug("onItemClicked: GenericNetworkShortcut");
                 Intent intent = new Intent(getActivity(), NetworkShortcutDetailsActivity.class);
                 intent.putExtra(NetworkShortcutDetailsFragment.EXTRA_SHORTCUT, (Serializable) item);
@@ -499,6 +504,8 @@ public class NetworkRootFragment extends BrowseSupportFragment {
                                 if (isAdded() && cursor != null && !cursor.isClosed()) {
                                     mNetworkShortcutsAdapter.clear();
                                     mNetworkShortcutsAdapter.add(new NetworkBrowse(getString(R.string.browse_net_server)));
+                                    // NovaPlayer Prime: "Stream" tile (play a video from a link)
+                                    mNetworkShortcutsAdapter.add(new StreamShortcut(getString(R.string.prime_stream)));
                                     if (cursor.getCount() > 0) {
                                         cursor.moveToFirst();
                                         do {

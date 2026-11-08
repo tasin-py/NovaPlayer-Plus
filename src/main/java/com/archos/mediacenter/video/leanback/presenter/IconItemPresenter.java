@@ -31,6 +31,8 @@ import android.widget.TextView;
 
 import com.archos.mediacenter.video.R;
 import com.archos.mediacenter.video.leanback.adapter.object.Icon;
+import com.archos.mediacenter.video.prime.update.PrimeUpdateBadge;
+import com.archos.mediacenter.video.prime.update.PrimeUpdater;
 
 /**
  * Created by vapillon on 10/04/15.
@@ -46,6 +48,8 @@ public class IconItemPresenter extends Presenter {
         final public ImageView mImageView;
         final public View mSelectionView;
         final public TextView mTitleView;
+        // NovaPlayer Prime: red "update available" dot on the Settings icon
+        final public View mBadgeView;
         final int mTextColorRegular;
         final int mTextColorDimmed;
         boolean mIsFocused = false;
@@ -68,6 +72,7 @@ public class IconItemPresenter extends Presenter {
             mImageView = (ImageView)shell.findViewById(R.id.image);
             mSelectionView = shell.findViewById(R.id.selection);
             mTitleView = (TextView)shell.findViewById(R.id.title);
+            mBadgeView = PrimeUpdateBadge.addTo((android.widget.RelativeLayout) shell, mImageView);
 
             // HACK: Allow us to get this ViewHolder while in IconItemRowPresenter, in order to apply dim effect with setDimmed
             shell.setTag(ViewHolder.this);
@@ -130,6 +135,8 @@ public class IconItemPresenter extends Presenter {
         Icon icon = (Icon)item;
         vh.mImageView.setImageResource(icon.getIconResId());
         vh.mTitleView.setText(icon.getName());
+        vh.mBadgeView.setVisibility(icon.getId() == Icon.ID.PREFERENCES
+                && PrimeUpdater.get(vh.view.getContext()).isUpdateAvailable() ? View.VISIBLE : View.GONE);
     }
 
     @Override

@@ -58,6 +58,9 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- NovaPlayer Prime: one-click self-update from GitHub Releases -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29"/>
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
@@ -1751,6 +1754,15 @@
         <activity
             android:name="com.archos.mediacenter.video.leanback.network.rescan.RescanActivity"
             android:theme="@style/Theme.Leanback.GuidedStep" />
+
+        <!-- NovaPlayer Prime -->
+        <activity
+            android:name="com.archos.mediacenter.video.prime.stream.StreamActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Leanback.GuidedStep" />
+        <receiver
+            android:name="com.archos.mediacenter.video.prime.update.PrimeInstallReceiver"
+            android:exported="false" />
 
         <activity
             android:name="com.archos.mediacenter.video.leanback.wizard.SubtitlesWizardActivity"

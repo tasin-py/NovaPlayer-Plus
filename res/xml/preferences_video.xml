@@ -21,6 +21,31 @@
             android:title="@string/UiLang_title"
             app:iconSpaceReserved="false"/>
     </PreferenceCategory>
+    <!-- NovaPlayer Prime: credits, support and updates (wired in prime/PrimePreferences.java) -->
+    <PreferenceCategory
+        android:key="prime_category"
+        android:title="@string/prime_app_name"
+        app:iconSpaceReserved="false">
+        <Preference
+            android:key="prime_update"
+            android:title="@string/prime_update_check"
+            app:iconSpaceReserved="false"/>
+        <Preference
+            android:key="prime_credits"
+            android:title="@string/prime_credits_title"
+            android:summary="@string/prime_credits_summary"
+            app:iconSpaceReserved="false"/>
+        <Preference
+            android:key="prime_support_me"
+            android:title="@string/prime_support_title"
+            android:summary="@string/prime_support_summary"
+            app:iconSpaceReserved="false"/>
+        <Preference
+            android:key="prime_support_nova"
+            android:title="@string/prime_support_nova_title"
+            android:summary="@string/prime_support_nova_summary"
+            app:iconSpaceReserved="false"/>
+    </PreferenceCategory>
     <PreferenceCategory
         android:key="preferences_category_video"
         android:title="@string/preferences_category_video"
