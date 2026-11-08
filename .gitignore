@@ -1,3 +1,6 @@
 android-sdk
 android-ndk
 release/config.ini
+
+# NovaPlayer Prime: release signing key (never commit)
+signing/
