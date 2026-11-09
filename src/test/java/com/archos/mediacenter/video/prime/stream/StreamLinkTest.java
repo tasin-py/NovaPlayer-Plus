@@ -68,6 +68,8 @@ public class StreamLinkTest {
         assertNull(StreamLink.parse("hello world"));
         assertNull(StreamLink.parse(""));
         assertNull(StreamLink.parse(null));
+        assertNull(StreamLink.parse("file://localhost/data/data/org.courville.nova/shared_prefs/x.xml"));
+        assertNull(StreamLink.parse("content://media/external/video/1"));
     }
 
     @Test

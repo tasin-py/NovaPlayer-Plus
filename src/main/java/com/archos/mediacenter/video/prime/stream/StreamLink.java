@@ -52,6 +52,8 @@ public final class StreamLink {
         this.guessedName = guessedName;
     }
 
+    private static final java.util.Set<String> ALLOWED_SCHEMES = new java.util.HashSet<>(java.util.Arrays.asList(
+            "http", "https", "rtsp", "rtmp", "rtmps", "rtp", "udp", "mms", "mmsh", "ftp"));
     private static final Pattern DRIVE_FILE = Pattern.compile("/file/d/([A-Za-z0-9_-]{10,})");
     private static final Pattern URL_IN_TEXT = Pattern.compile("(?i)\\b((?:https?|rtsp|rtmps?|rtp|udp|mms|mmsh|ftp)://\\S+)");
 
@@ -71,6 +73,8 @@ public final class StreamLink {
 
         Uri uri = Uri.parse(input);
         if (uri.getScheme() == null || uri.getHost() == null || uri.getHost().isEmpty()) return null;
+        // Network streams only: never hand file://, content:// or intent: links to the player
+        if (!ALLOWED_SCHEMES.contains(uri.getScheme().toLowerCase(Locale.ROOT))) return null;
         String host = uri.getHost().toLowerCase(Locale.ROOT);
 
         // Google Drive

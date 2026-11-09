@@ -69,6 +69,7 @@ public final class PrimeUpdater {
     private static final String KEY_AVAILABLE_NAME = "available_name";
     private static final String KEY_AVAILABLE_URL = "available_url";
     private static final String KEY_AVAILABLE_SIZE = "available_size";
+    private static final int MAX_API_RESPONSE = 2 * 1024 * 1024;
     private static final long AUTO_CHECK_INTERVAL_MS = TimeUnit.HOURS.toMillis(6);
 
     static final String ACTION_INSTALL_STATUS = "com.archos.mediacenter.video.prime.INSTALL_STATUS";
@@ -204,7 +205,7 @@ public final class PrimeUpdater {
         if (mState == State.DOWNLOADING || mState == State.INSTALLING || mState == State.CHECKING) return;
         final String url = mPrefs.getString(KEY_AVAILABLE_URL, null);
         final long size = mPrefs.getLong(KEY_AVAILABLE_SIZE, -1);
-        if (url == null || url.isEmpty()) {
+        if (url == null || !url.startsWith("https://github.com/")) {
             check();
             return;
         }
@@ -303,7 +304,10 @@ public final class PrimeUpdater {
         // GitHub download links redirect to another host: follow manually to be safe
         String current = url;
         for (int i = 0; i < 5; i++) {
-            HttpURLConnection c = (HttpURLConnection) new URL(current).openConnection();
+            URL u = new URL(current);
+            // HTTPS only, on every hop (Android also checks the APK signature before installing)
+            if (!"https".equalsIgnoreCase(u.getProtocol())) throw new Exception("Refusing non-HTTPS URL");
+            HttpURLConnection c = (HttpURLConnection) u.openConnection();
             c.setConnectTimeout(15000);
             c.setReadTimeout(30000);
             c.setInstanceFollowRedirects(false);
@@ -331,7 +335,10 @@ public final class PrimeUpdater {
         try (InputStream in = c.getInputStream(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             byte[] buf = new byte[16 * 1024];
             int n;
-            while ((n = in.read(buf)) != -1) out.write(buf, 0, n);
+            while ((n = in.read(buf)) != -1) {
+                out.write(buf, 0, n);
+                if (out.size() > MAX_API_RESPONSE) throw new Exception("Response too large");
+            }
             return new String(out.toByteArray(), StandardCharsets.UTF_8);
         } finally {
             c.disconnect();
