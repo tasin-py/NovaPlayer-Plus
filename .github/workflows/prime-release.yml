@@ -96,8 +96,14 @@ jobs:
       run: |
         mkdir -p out
         find nova/Video/build/outputs/apk -name '*-release.apk' -exec cp {} out/ \;
+        # Also attach "prime-<abi>.apk": the in-app updater downloads these fixed names
+        # through github.com links, so it never needs the rate-limited GitHub API.
+        for f in out/*-release.apk; do
+          abi=$(basename "$f" | sed -nE 's/.*-(arm64-v8a|armeabi-v7a|x86_64|x86|universal)-release\.apk$/\1/p')
+          if [ -n "$abi" ]; then cp "$f" "out/prime-$abi.apk"; fi
+        done
         ls -l out
-        first=$(ls out/*.apk | head -1)
+        first=$(ls out/*-release.apk | head -1)
         # file names look like org.courville.nova-<versionCode>-<versionName>-<abi>-release.apk
         code=$(basename "$first" | sed -E 's/^[^-]+-([0-9]+)-.*/\1/')
         vname=$(basename "$first" | sed -E 's/^[^-]+-[0-9]+-([0-9.]+-[0-9.]+)-.*/\1/')
