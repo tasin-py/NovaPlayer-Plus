@@ -46,7 +46,8 @@ public class Box {
         ANIMES_BY_GENRE,
         ANIMES_BY_YEAR,
         ALL_ANIMESHOWS,
-        ANIME_COLLECTIONS
+        ANIME_COLLECTIONS,
+        PRIME_BOOKMARKS // NovaPlayer Prime: "Bookmarked" stream folders and videos
     }
 
     final private ID mBoxId;

@@ -196,7 +196,7 @@ public final class PrimeUpdater {
             java.util.regex.Matcher m = java.util.regex.Pattern
                     .compile("<title>\\s*Release (.+?) · ").matcher(html);
             if (m.find()) {
-                String name = m.group(1).replace("NovaPlayer Prime", "").trim();
+                String name = m.group(1).replace("NovaPlayer Prime", "").replace("Nova Player Plus", "").trim();
                 if (!name.isEmpty() && name.length() < 60) return name;
             }
         } catch (Exception e) {

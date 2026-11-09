@@ -20,13 +20,21 @@ import androidx.leanback.app.GuidedStepSupportFragment;
 
 import com.archos.mediacenter.video.leanback.LeanbackActivity;
 
-/** Hosts {@link StreamFragment}, same structure as NOVA's Rescan screen. */
+/**
+ * Hosts {@link StreamFragment} (Network &gt; Stream), or {@link StreamBookmarksFragment} for the
+ * home screen's "Bookmarked" folder. Same structure as NOVA's Rescan screen.
+ */
 public class StreamActivity extends LeanbackActivity {
+
+    public static final String EXTRA_BOOKMARKS = "prime_bookmarks";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            GuidedStepSupportFragment.addAsRoot(this, new StreamFragment(), android.R.id.content);
+            boolean bookmarks = getIntent().getBooleanExtra(EXTRA_BOOKMARKS, false);
+            GuidedStepSupportFragment.addAsRoot(this,
+                    bookmarks ? new StreamBookmarksFragment() : new StreamFragment(), android.R.id.content);
         }
     }
 }

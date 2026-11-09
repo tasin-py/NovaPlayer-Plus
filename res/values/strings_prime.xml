@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- NovaPlayer Prime strings (fork of NOVA Video Player, customized by tasin-py) -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="prime_app_name" translatable="false">NovaPlayer Prime</string>
+    <string name="prime_app_name" translatable="false">Nova Player Plus</string>
     <string name="prime_close">Close</string>
 
     <!-- Stream -->
@@ -47,12 +47,18 @@
     <string name="prime_stream_retry">Try again</string>
     <string name="prime_stream_play_anyway">Try to play it anyway</string>
 
+    <!-- Home screen > Network & Files > Bookmarked -->
+    <string name="prime_bookmarked">Bookmarked</string>
+    <string name="prime_bookmarked_description">Your bookmarked stream folders and videos. They stay until you remove them.</string>
+    <string name="prime_bookmarked_empty">No bookmarks yet</string>
+    <string name="prime_bookmarked_empty_hint">In Network &gt; Stream, open a folder or a video and choose Bookmark.</string>
+
     <!-- Credits and support -->
-    <string name="prime_credits_title">NovaPlayer Prime by tasin-py</string>
+    <string name="prime_credits_title">Nova Player Plus by tasin-py</string>
     <string name="prime_credits_summary">Based on NOVA Video Player by the NOVA developers (Courville Software and contributors), itself derived from Archos Video Player. Forked and customized by tasin-py · github.com/tasin-py</string>
     <string name="prime_support_title">Support tasin-py</string>
     <string name="prime_support_summary">Socials and Buy me a coffee</string>
-    <string name="prime_support_intro">Thanks for using NovaPlayer Prime! Follow me or buy me a coffee:</string>
+    <string name="prime_support_intro">Thanks for using Nova Player Plus! Follow me or buy me a coffee:</string>
     <string name="prime_support_coffee">Buy me a coffee</string>
     <string name="prime_support_qr_description">QR code for the support page</string>
     <string name="prime_support_qr_hint">Scan with your phone, or open the link below</string>

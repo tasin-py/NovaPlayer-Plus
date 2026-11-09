@@ -840,6 +840,7 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
 
         mFileBrowsingRowAdapter = new ArrayObjectAdapter(new BoxItemPresenter());
         mFileBrowsingRowAdapter.add(new Box(Box.ID.NETWORK, getString(R.string.network_storage), R.drawable.filetype_new_server));
+        mFileBrowsingRowAdapter.add(new Box(Box.ID.PRIME_BOOKMARKS, getString(R.string.prime_bookmarked), R.drawable.filetype_new_folder)); // NovaPlayer Prime
         mFileBrowsingRowAdapter.add(new Box(Box.ID.FOLDERS, getString(R.string.internal_storage), R.drawable.filetype_new_folder));
         mFileBrowsingRowAdapter.add(new Box(Box.ID.VIDEOS_BY_LISTS, getString(R.string.video_lists), R.drawable.filetype_new_playlist));
 
@@ -1763,6 +1764,7 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
 
         mFileBrowsingRowAdapter.clear();
         mFileBrowsingRowAdapter.add(new Box(Box.ID.NETWORK, getString(R.string.network_storage), R.drawable.filetype_new_server));
+        mFileBrowsingRowAdapter.add(new Box(Box.ID.PRIME_BOOKMARKS, getString(R.string.prime_bookmarked), R.drawable.filetype_new_folder)); // NovaPlayer Prime
         mFileBrowsingRowAdapter.add(new Box(Box.ID.FOLDERS, getString(R.string.internal_storage), R.drawable.filetype_new_folder));
 
         if (hasExternal) {
@@ -1869,6 +1871,9 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
                     }
                     case NETWORK ->
                             vActivity.startActivity(new Intent(vActivity, NetworkRootActivity.class));
+                    case PRIME_BOOKMARKS -> // NovaPlayer Prime
+                            vActivity.startActivity(new Intent(vActivity, com.archos.mediacenter.video.prime.stream.StreamActivity.class)
+                                    .putExtra(com.archos.mediacenter.video.prime.stream.StreamActivity.EXTRA_BOOKMARKS, true));
                     case NON_SCRAPED_VIDEOS ->
                             vActivity.startActivity(new Intent(vActivity, NonScrapedVideosActivity.class));
                     case ALL_TVSHOWS ->
