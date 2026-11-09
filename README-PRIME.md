@@ -13,9 +13,13 @@ Support tasin-py: <https://www.supportkori.com/tasinpy>
 
 ## What Prime adds
 
-- **Stream** (Android TV: *Network* > *Stream*): type or paste a link and play it. It handles direct
+- **Stream** (Android TV: *Network* > *Stream*): type or paste a link and open it. It handles direct
   http(s) files (mkv, mp4…), HLS `.m3u8`, DASH, rtsp/rtmp/udp, and Google Drive, Dropbox and
   OneDrive share links (converted to direct links). Played links stay in *Recent streams* for 30 days.
+  - **Folder links** (h5ai, nginx, Apache and similar server listings) open as a browsable list of
+    sub-folders and videos.
+  - **Nothing plays instantly:** a video link first shows its title, file name, size and server, with *Play*.
+  - **Bookmarks:** bookmark any folder or video. Bookmarks stay until you remove them.
 - **Settings > NovaPlayer Prime**: credits, *Support tasin-py* (socials, Buy me a coffee QR),
   *Support the original NOVA developers*, and **Check for updates**.
 - **One-click updates from GitHub Releases**: the app checks this repo every 6 hours. When a newer build
