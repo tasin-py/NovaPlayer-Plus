@@ -26,8 +26,6 @@ import android.os.Looper;
 import com.archos.mediacenter.video.BuildConfig;
 import com.archos.mediacenter.video.prime.PrimeConfig;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +43,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Checks the fork's GitHub Releases for a newer build and installs it in one click.
+ * Uses only normal github.com links (no API, so no 60-requests-per-hour limit).
  *
  * Releases are tagged "prime-&lt;versionCode&gt;" by the GitHub Actions workflow and carry one APK per ABI.
  * The APK is streamed straight into an Android PackageInstaller session (no file left behind) and
@@ -137,27 +136,26 @@ public final class PrimeUpdater {
         setState(State.CHECKING);
         mExecutor.execute(() -> {
             try {
-                JSONObject release = new JSONObject(httpGetString(PrimeConfig.LATEST_RELEASE_API));
+                String tag = latestTag();
                 mPrefs.edit().putLong(KEY_LAST_CHECK, System.currentTimeMillis()).apply();
-                String tag = release.optString("tag_name", "");
                 long code = parseVersionCode(tag);
                 if (code <= BuildConfig.VERSION_CODE) {
                     clearAvailable();
                     setState(State.UP_TO_DATE);
                     return;
                 }
-                JSONObject asset = pickApk(release.optJSONArray("assets"));
-                if (asset == null) {
+                String abi = pickAbi();
+                if (abi == null) {
                     clearAvailable();
-                    fail("No APK in release " + tag);
+                    fail("No APK for this device (" + android.text.TextUtils.join(",", Build.SUPPORTED_ABIS) + ")");
                     return;
                 }
-                String name = release.optString("name", tag);
                 mPrefs.edit()
                         .putLong(KEY_AVAILABLE_CODE, code)
-                        .putString(KEY_AVAILABLE_NAME, name.isEmpty() ? tag : name)
-                        .putString(KEY_AVAILABLE_URL, asset.optString("browser_download_url"))
-                        .putLong(KEY_AVAILABLE_SIZE, asset.optLong("size", -1))
+                        .putString(KEY_AVAILABLE_NAME, releaseName(tag, code))
+                        .putString(KEY_AVAILABLE_URL, PrimeConfig.RELEASE_DOWNLOAD + tag + "/"
+                                + PrimeConfig.APK_NAME_PREFIX + abi + ".apk")
+                        .putLong(KEY_AVAILABLE_SIZE, -1)
                         .apply();
                 setState(State.AVAILABLE);
             } catch (Exception e) {
@@ -165,6 +163,46 @@ public final class PrimeUpdater {
                 fail(e.getMessage());
             }
         });
+    }
+
+    /** Reads the tag of the latest release from the redirect of the normal releases page (no API). */
+    static String latestTag() throws Exception {
+        HttpURLConnection c = (HttpURLConnection) new URL(PrimeConfig.LATEST_RELEASE_PAGE).openConnection();
+        try {
+            c.setConnectTimeout(15000);
+            c.setReadTimeout(30000);
+            c.setInstanceFollowRedirects(false);
+            c.setRequestMethod("HEAD");
+            c.setRequestProperty("User-Agent", "NovaPlayer-Prime-Updater");
+            int code = c.getResponseCode();
+            String loc = c.getHeaderField("Location");
+            if (code < 300 || code >= 400 || loc == null) throw new Exception("HTTP " + code);
+            int i = loc.indexOf("/releases/tag/");
+            if (i < 0) return ""; // no release published yet
+            String tag = loc.substring(i + "/releases/tag/".length());
+            int end = tag.indexOf('?');
+            if (end >= 0) tag = tag.substring(0, end);
+            if (!tag.matches("[A-Za-z0-9._-]+")) throw new Exception("Unexpected release tag");
+            return tag;
+        } finally {
+            c.disconnect();
+        }
+    }
+
+    /** Release title from the release web page ("NovaPlayer Prime 6.6.4-…"), else "build &lt;code&gt;". */
+    static String releaseName(String tag, long code) {
+        try {
+            String html = httpGetString(PrimeConfig.RELEASE_TAG_PAGE + tag);
+            java.util.regex.Matcher m = java.util.regex.Pattern
+                    .compile("<title>\\s*Release (.+?) · ").matcher(html);
+            if (m.find()) {
+                String name = m.group(1).replace("NovaPlayer Prime", "").trim();
+                if (!name.isEmpty() && name.length() < 60) return name;
+            }
+        } catch (Exception e) {
+            log.debug("release name lookup failed", e);
+        }
+        return "build " + code;
     }
 
     static long parseVersionCode(String tag) {
@@ -176,25 +214,14 @@ public final class PrimeUpdater {
         }
     }
 
-    /** Picks the APK built for this device's CPU (falls back to a universal APK). */
-    private static JSONObject pickApk(JSONArray assets) {
-        if (assets == null) return null;
+    private static final String[] RELEASE_ABIS = {"arm64-v8a", "armeabi-v7a", "x86_64", "x86"};
+
+    /** The first ABI this device supports (in its order of preference) that releases are built for. */
+    static String pickAbi() {
         for (String abi : Build.SUPPORTED_ABIS) {
-            for (int i = 0; i < assets.length(); i++) {
-                JSONObject a = assets.optJSONObject(i);
-                String n = a == null ? "" : a.optString("name", "").toLowerCase(Locale.ROOT);
-                if (n.endsWith(".apk") && n.contains("-" + abi.toLowerCase(Locale.ROOT) + "-")) return a;
-            }
+            for (String built : RELEASE_ABIS) if (built.equalsIgnoreCase(abi)) return built;
         }
-        JSONObject anyApk = null;
-        for (int i = 0; i < assets.length(); i++) {
-            JSONObject a = assets.optJSONObject(i);
-            String n = a == null ? "" : a.optString("name", "").toLowerCase(Locale.ROOT);
-            if (!n.endsWith(".apk")) continue;
-            if (n.contains("universal")) return a;
-            if (anyApk == null) anyApk = a;
-        }
-        return anyApk;
+        return null;
     }
 
     // ---------------------------------------------------------------- install
@@ -312,7 +339,6 @@ public final class PrimeUpdater {
             c.setReadTimeout(30000);
             c.setInstanceFollowRedirects(false);
             c.setRequestProperty("User-Agent", "NovaPlayer-Prime-Updater");
-            c.setRequestProperty("Accept", url.contains("api.github.com") ? "application/vnd.github+json" : "*/*");
             int code = c.getResponseCode();
             if (code >= 300 && code < 400) {
                 String loc = c.getHeaderField("Location");

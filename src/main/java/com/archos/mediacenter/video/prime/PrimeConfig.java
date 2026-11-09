@@ -31,8 +31,16 @@ public final class PrimeConfig {
 
     public static final String GITHUB_PROFILE_URL = "https://github.com/" + GITHUB_OWNER;
     public static final String GITHUB_REPO_URL = GITHUB_PROFILE_URL + "/" + GITHUB_REPO;
-    public static final String LATEST_RELEASE_API =
-            "https://api.github.com/repos/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/releases/latest";
+    /**
+     * Normal web links, not the GitHub API: the API allows only 60 requests per hour per IP,
+     * which ISPs that share one public IP between many customers use up quickly.
+     * "releases/latest" redirects to ".../releases/tag/&lt;tag&gt;".
+     */
+    public static final String LATEST_RELEASE_PAGE = GITHUB_REPO_URL + "/releases/latest";
+    public static final String RELEASE_TAG_PAGE = GITHUB_REPO_URL + "/releases/tag/";
+    public static final String RELEASE_DOWNLOAD = GITHUB_REPO_URL + "/releases/download/";
+    /** Each release also carries "prime-&lt;abi&gt;.apk" so the file name is predictable. */
+    public static final String APK_NAME_PREFIX = "prime-";
 
     /** Release tags look like "prime-2675123": the number is the APK versionCode. */
     public static final String RELEASE_TAG_PREFIX = "prime-";
