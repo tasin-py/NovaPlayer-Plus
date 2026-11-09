@@ -1392,6 +1392,23 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
     private void addRow(int position, ListRow row) {
         mRowsAdapter.add(position, row);
         if (mRowPendingSelection != null) stabilizeRowsSelection(position);
+        primeKeepFilesRowSecond(); // NovaPlayer Prime
+    }
+
+    // NovaPlayer Prime: keep the "Network & Files" row (with Bookmarked) as the 2nd row, right
+    // below the top row, however NOVA adds or removes its dynamic rows. The selected row is kept.
+    private void primeKeepFilesRowSecond() {
+        int position = getRowPosition(ROW_ID_FILES);
+        final int target = 1;
+        if (position <= target) return; // missing, or already 1st/2nd: only ever move it up
+        if (mRowPendingSelection == null) {
+            int selectedPosition = Math.max(0, Math.min(getSelectedPosition(), mRowsAdapter.size() - 1));
+            mRowPendingSelection = mRowsAdapter.get(selectedPosition);
+        }
+        Object filesRow = mRowsAdapter.get(position);
+        mRowsAdapter.removeItems(position, 1);
+        mRowsAdapter.add(target, filesRow);
+        stabilizeRowsSelection(target);
     }
 
     private void replaceRow(int position, ListRow row) {
@@ -1415,6 +1432,7 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
         }
         mRowsAdapter.removeItems(position, count);
         stabilizeRowsSelection(position);
+        primeKeepFilesRowSecond(); // NovaPlayer Prime
     }
 
     private void stabilizeRowsSelection(int fallbackPosition) {
