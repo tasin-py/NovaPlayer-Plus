@@ -21,7 +21,6 @@ public class StreamLinkTest {
         assertEquals("video/x-matroska", l.mimeType);
         assertEquals("Thor Ragnarok (2017) 1080p", l.guessedName);
         assertFalse(l.looksLikeFolder());
-        assertFalse(l.needsNameLookup());
     }
 
     @Test
@@ -36,7 +35,6 @@ public class StreamLinkTest {
         assertEquals(StreamLink.Kind.GOOGLE_DRIVE, l.kind);
         assertEquals("https://drive.usercontent.google.com/download?id=1AbCdEfGhIjKlMnOp_qrs-TUV&export=download&confirm=t",
                 l.playUri.toString());
-        assertTrue(l.needsNameLookup());
         StreamLink open = StreamLink.parse("https://drive.google.com/open?id=1AbCdEfGhIjKlMnOp_qrs-TUV");
         assertEquals(l.playUri, open.playUri);
     }

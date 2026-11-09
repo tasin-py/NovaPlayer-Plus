@@ -6,7 +6,7 @@
 
     <!-- Stream -->
     <string name="prime_stream">Stream</string>
-    <string name="prime_stream_description">Play a video straight from a link: direct http(s) files (mkv, mp4…), HLS (.m3u8), DASH, rtsp/rtmp, and Google Drive, Dropbox or OneDrive share links.</string>
+    <string name="prime_stream_description">Open a video or a folder straight from a link: direct http(s) files (mkv, mp4…), server folders, HLS (.m3u8), DASH, rtsp/rtmp, and Google Drive, Dropbox or OneDrive share links.</string>
     <string name="prime_stream_link">Link</string>
     <string name="prime_stream_hint">Type or paste a link</string>
     <string name="prime_stream_paste">Paste</string>
@@ -17,7 +17,35 @@
     <string name="prime_stream_clear_history">Clear history</string>
     <string name="prime_stream_clipboard_empty">Nothing to paste: the clipboard is empty</string>
     <string name="prime_stream_invalid">This does not look like a video link</string>
-    <string name="prime_stream_folder">This link is a folder. Open the folder in a browser and copy the link of the video file itself.</string>
+    <string name="prime_stream_open">Open</string>
+    <string name="prime_stream_open_description">Shows the video or folder first</string>
+    <string name="prime_stream_loading">Loading…</string>
+    <string name="prime_stream_bookmarks">Bookmarks</string>
+    <string name="prime_stream_bookmarks_description">Saved until you remove them</string>
+    <string name="prime_stream_bookmark_folder">Bookmark this folder</string>
+    <string name="prime_stream_bookmark_video">Bookmark this video</string>
+    <string name="prime_stream_bookmark_remove">Remove bookmark</string>
+    <string name="prime_stream_bookmark_hint">Saved until you remove it</string>
+    <string name="prime_stream_bookmarked">Bookmarked</string>
+    <string name="prime_stream_bookmark_added">Bookmarked</string>
+    <string name="prime_stream_bookmark_removed">Bookmark removed</string>
+    <string name="prime_stream_folder_label">Folder</string>
+    <string name="prime_stream_video_label">Video</string>
+    <string name="prime_stream_folder_empty">No videos or folders here</string>
+    <string name="prime_stream_folder_summary">%1$s · %2$s\n%3$s</string>
+    <plurals name="prime_stream_folders">
+        <item quantity="one">%d folder</item>
+        <item quantity="other">%d folders</item>
+    </plurals>
+    <plurals name="prime_stream_videos">
+        <item quantity="one">%d video</item>
+        <item quantity="other">%d videos</item>
+    </plurals>
+    <string name="prime_stream_not_folder">This link opens a web page, not a video or a folder</string>
+    <string name="prime_stream_error">Couldn\'t open this link: %1$s</string>
+    <string name="prime_stream_check_failed">Couldn\'t check the file (%1$s). You can still try to play it.</string>
+    <string name="prime_stream_retry">Try again</string>
+    <string name="prime_stream_play_anyway">Try to play it anyway</string>
 
     <!-- Credits and support -->
     <string name="prime_credits_title">NovaPlayer Prime by tasin-py</string>

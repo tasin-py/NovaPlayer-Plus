@@ -14,14 +14,10 @@
 
 package com.archos.mediacenter.video.prime.stream;
 
-import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.InputType;
 import android.text.format.DateUtils;
 import android.view.View;
@@ -35,35 +31,28 @@ import androidx.leanback.widget.GuidedAction;
 
 import com.archos.mediacenter.video.R;
 import com.archos.mediacenter.video.leanback.overlay.Overlay;
-import com.archos.mediacenter.video.player.PlayerActivity;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
- * "Stream" screen: a link box, a Paste button, a Play button and the list of
- * links played in the last 30 days. Uses the same GuidedStep look as NOVA's other TV screens.
+ * "Stream" screen: a link box, a Paste button, an Open button, bookmarks, and the links
+ * played in the last 30 days. Open shows the folder or video first ({@link StreamBrowseFragment}).
+ * Uses the same GuidedStep look as NOVA's other TV screens.
  */
 public class StreamFragment extends GuidedStepSupportFragment {
 
-    private static final Logger log = LoggerFactory.getLogger(StreamFragment.class);
-
     private static final long ID_URL = 1;
     private static final long ID_PASTE = 2;
-    private static final long ID_PLAY = 3;
+    private static final long ID_OPEN = 3;
     private static final long ID_HISTORY_HEADER = 4;
     private static final long ID_CLEAR_HISTORY = 5;
+    private static final long ID_BOOKMARKS_HEADER = 6;
     private static final long ID_HISTORY_BASE = 1000;
+    private static final long ID_BOOKMARK_BASE = 100000;
 
-    private static final ExecutorService sNameLookup = Executors.newSingleThreadExecutor();
-
-    private final Handler mHandler = new Handler(Looper.getMainLooper());
     private final List<StreamHistory.Entry> mHistory = new ArrayList<>();
+    private final List<StreamBookmarks.Entry> mBookmarks = new ArrayList<>();
     private String mUrl = "";
     private Overlay mOverlay;
 
@@ -136,9 +125,32 @@ public class StreamFragment extends GuidedStepSupportFragment {
                 .description(getString(R.string.prime_stream_paste_description))
                 .build());
         actions.add(new GuidedAction.Builder(c)
-                .id(ID_PLAY)
-                .title(getString(R.string.prime_stream_play))
+                .id(ID_OPEN)
+                .title(getString(R.string.prime_stream_open))
+                .description(getString(R.string.prime_stream_open_description))
                 .build());
+
+        mBookmarks.clear();
+        mBookmarks.addAll(StreamBookmarks.load(c));
+        if (!mBookmarks.isEmpty()) {
+            actions.add(new GuidedAction.Builder(c)
+                    .id(ID_BOOKMARKS_HEADER)
+                    .title(getString(R.string.prime_stream_bookmarks))
+                    .description(getString(R.string.prime_stream_bookmarks_description))
+                    .infoOnly(true)
+                    .focusable(false)
+                    .build());
+            for (int i = 0; i < mBookmarks.size(); i++) {
+                StreamBookmarks.Entry e = mBookmarks.get(i);
+                actions.add(new GuidedAction.Builder(c)
+                        .id(ID_BOOKMARK_BASE + i)
+                        .title(e.name)
+                        .description(getString(e.folder ? R.string.prime_stream_folder_label : R.string.prime_stream_video_label)
+                                + "  ·  " + e.url)
+                        .multilineDescription(false)
+                        .build());
+            }
+        }
 
         mHistory.clear();
         mHistory.addAll(StreamHistory.load(c));
@@ -190,7 +202,7 @@ public class StreamFragment extends GuidedStepSupportFragment {
     public long onGuidedActionEditedAndProceed(GuidedAction action) {
         if (action.getId() == ID_URL) {
             setUrl(action.getEditTitle() == null ? "" : action.getEditTitle().toString());
-            return ID_PLAY; // jump to Play after typing
+            return ID_OPEN; // jump to Open after typing
         }
         return GuidedAction.ACTION_ID_CURRENT;
     }
@@ -208,18 +220,25 @@ public class StreamFragment extends GuidedStepSupportFragment {
         long id = action.getId();
         if (id == ID_PASTE) {
             paste();
-        } else if (id == ID_PLAY) {
-            play(mUrl, null);
+        } else if (id == ID_OPEN) {
+            open(mUrl, null);
         } else if (id == ID_CLEAR_HISTORY) {
             StreamHistory.clear(requireActivity());
             rebuildActions();
             setSelectedActionPosition(findActionPositionById(ID_URL));
+        } else if (id >= ID_BOOKMARK_BASE) {
+            int index = (int) (id - ID_BOOKMARK_BASE);
+            if (index >= 0 && index < mBookmarks.size()) {
+                StreamBookmarks.Entry e = mBookmarks.get(index);
+                StreamBrowseFragment.open(this, e.url, e.name,
+                        e.folder ? StreamBrowseFragment.HINT_FOLDER : StreamBrowseFragment.HINT_VIDEO, -1, false, null);
+            }
         } else if (id >= ID_HISTORY_BASE) {
             int index = (int) (id - ID_HISTORY_BASE);
             if (index >= 0 && index < mHistory.size()) {
                 StreamHistory.Entry e = mHistory.get(index);
                 setUrl(e.url);
-                play(e.url, e.name);
+                open(e.url, e.name);
             }
         }
     }
@@ -238,42 +257,16 @@ public class StreamFragment extends GuidedStepSupportFragment {
         }
         StreamLink link = StreamLink.parse(text.toString());
         setUrl(link != null ? link.original : text.toString());
-        setSelectedActionPosition(findActionPositionById(ID_PLAY));
+        setSelectedActionPosition(findActionPositionById(ID_OPEN));
     }
 
-    private void play(String text, String knownName) {
-        Context c = requireActivity();
+    /** Shows the folder or video first; nothing plays until the user clicks Play there. */
+    private void open(String text, String knownName) {
         StreamLink link = StreamLink.parse(text);
         if (link == null) {
-            Toast.makeText(c, R.string.prime_stream_invalid, Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireActivity(), R.string.prime_stream_invalid, Toast.LENGTH_SHORT).show();
             return;
         }
-        if (link.looksLikeFolder()) {
-            Toast.makeText(c, R.string.prime_stream_folder, Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        StreamHistory.add(c, link.original, knownName != null ? knownName : link.guessedName);
-        if (knownName == null && link.needsNameLookup()) {
-            final Context app = c.getApplicationContext();
-            sNameLookup.execute(() -> {
-                String name = link.fetchServerFileName();
-                if (name != null && !name.isEmpty()) {
-                    StreamHistory.rename(app, link.original, name);
-                    mHandler.post(this::rebuildActions);
-                }
-            });
-        }
-
-        if (log.isDebugEnabled()) log.debug("play: {} -> {} ({})", link.original, link.playUri, link.mimeType);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setClass(c, PlayerActivity.class);
-        intent.setDataAndType(link.playUri, link.mimeType);
-        try {
-            startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            log.error("play: cannot start player", e);
-            Toast.makeText(c, R.string.prime_stream_invalid, Toast.LENGTH_SHORT).show();
-        }
+        StreamBrowseFragment.open(this, link.original, knownName, StreamBrowseFragment.HINT_UNKNOWN, -1, true, null);
     }
 }

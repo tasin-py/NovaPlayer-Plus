@@ -18,8 +18,6 @@ import android.net.Uri;
 import android.util.Base64;
 
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
@@ -121,35 +119,6 @@ public final class StreamLink {
         if (scheme == null || !scheme.toLowerCase(Locale.ROOT).startsWith("http")) return false;
         String path = playUri.getPath();
         return path != null && path.length() > 1 && path.endsWith("/") && playUri.getQuery() == null;
-    }
-
-    /** Whether it is worth asking the server for the real file name. */
-    public boolean needsNameLookup() {
-        String scheme = playUri.getScheme();
-        if (scheme == null || !scheme.toLowerCase(Locale.ROOT).startsWith("http")) return false;
-        return kind == Kind.GOOGLE_DRIVE || kind == Kind.ONEDRIVE || extension(playUri.getLastPathSegment()) == null;
-    }
-
-    /**
-     * Asks the server for the file name (Content-Disposition). Blocking: call off the UI thread.
-     * @return null if unknown.
-     */
-    public String fetchServerFileName() {
-        HttpURLConnection c = null;
-        try {
-            c = (HttpURLConnection) new URL(playUri.toString()).openConnection();
-            c.setInstanceFollowRedirects(true);
-            c.setConnectTimeout(8000);
-            c.setReadTimeout(8000);
-            c.setRequestProperty("Range", "bytes=0-0");
-            c.connect();
-            String cd = c.getHeaderField("Content-Disposition");
-            return stripExtension(fileNameFromContentDisposition(cd));
-        } catch (Exception e) {
-            return null;
-        } finally {
-            if (c != null) c.disconnect();
-        }
     }
 
     static String fileNameFromContentDisposition(String cd) {
