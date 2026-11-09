@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-  <!-- NovaPlayer Prime manifest: NOVA v6.6 sources, with the app UI (aos-Video) and this
-       build repo taken from tasin-py's forks. Everything else comes from upstream NOVA. -->
+  <!-- NovaPlayer Prime manifest: NOVA v6.6 sources. The build setup (branch "prime") and the
+       app UI (aos-Video, branch "prime-video") both come from tasin-py/NovaPlayer-Prime.
+       Everything else comes from upstream NOVA. -->
   <remote name="github" fetch="https://github.com/nova-video-player" />
   <remote name="prime" fetch="https://github.com/tasin-py" />
 
@@ -11,7 +12,7 @@
     <copyfile src="Makefile" dest="Makefile" />
   </project>
 
-  <project path="Video" name="aos-Video" remote="prime" revision="prime" />
+  <project path="Video" name="NovaPlayer-Prime" remote="prime" revision="prime-video" />
   <project path="MediaLib" name="aos-MediaLib" revision="v6.6" />
   <project path="FileCoreLibrary" name="aos-FileCoreLibrary" revision="v6.6" />
 

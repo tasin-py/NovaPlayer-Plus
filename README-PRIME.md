@@ -29,8 +29,8 @@ Support tasin-py: <https://www.supportkori.com/tasinpy>
 
 | Repo | What |
 | --- | --- |
-| `tasin-py/NovaPlayer-Prime` (this repo, branch `prime`) | build setup: `prime.xml` manifest + `.github/workflows/prime-release.yml` |
-| `tasin-py/aos-Video` (branch `prime`) | the app UI, where all Prime code lives (`src/main/java/com/archos/mediacenter/video/prime/`) |
+| this repo, branch `prime` | build setup: `prime.xml` manifest + `.github/workflows/prime-release.yml` |
+| this repo, branch `prime-video` | the app UI (NOVA's `aos-Video`), where all Prime code lives (`src/main/java/com/archos/mediacenter/video/prime/`) |
 | everything else | pulled unchanged from `nova-video-player` |
 
 Prime code is kept in its own `prime` package and its own resource files (`strings_prime.xml`).
@@ -49,7 +49,7 @@ Signing secrets (one-time): see `signing/SECRETS.txt` on the maintainer's PC (ne
 cd Video
 git fetch https://github.com/nova-video-player/aos-Video.git v6.6
 git merge FETCH_HEAD
-git push origin prime
+git push https://github.com/tasin-py/NovaPlayer-Prime.git HEAD:prime-video
 ```
 
 When NOVA moves to a new branch (for example v6.7), update the revisions in `prime.xml` to match their newest manifest.
