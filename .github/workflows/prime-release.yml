@@ -115,12 +115,12 @@ jobs:
       uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
       with:
         tag_name: prime-${{ steps.apks.outputs.code }}
-        name: NovaPlayer Prime ${{ steps.apks.outputs.name }}
+        name: Nova Player Plus ${{ steps.apks.outputs.name }}
         target_commitish: ${{ github.sha }}
         make_latest: true
         body: |
-          NovaPlayer Prime ${{ steps.apks.outputs.name }} (build ${{ steps.apks.outputs.code }}).
+          Nova Player Plus ${{ steps.apks.outputs.name }} (build ${{ steps.apks.outputs.code }}).
           Based on NOVA Video Player by the NOVA developers; forked and customized by tasin-py.
           Install the APK matching your device: most Android TVs use armeabi-v7a or arm64-v8a.
-          Already installed? Settings > NovaPlayer Prime > Check for updates.
+          Already installed? Settings > Nova Player Plus > Check for updates.
         files: out/*.apk
