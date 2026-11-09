@@ -37,7 +37,7 @@ jobs:
         fi
 
     - name: setup java17
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4.7.1
       with:
         java-version: '17'
         distribution: 'temurin'
@@ -53,12 +53,15 @@ jobs:
         sudo chmod a+x /usr/local/bin/repo
 
     - name: retrieve full source (NOVA upstream + Prime forks)
+      env:
+        REPO_URL: https://github.com/${{ github.repository }}
+        REF_NAME: ${{ github.ref_name }}
       run: |
         git config --global user.email "ci@users.noreply.github.com"
         git config --global user.name "CI"
         mkdir nova
         cd nova
-        repo init -u https://github.com/${{ github.repository }} -b ${{ github.ref_name }} -m prime.xml
+        repo init -u "$REPO_URL" -b "$REF_NAME" -m prime.xml
         repo sync -j 4
         repo forall -c 'git checkout -t $REPO_REMOTE/$REPO_RREV'
 
@@ -103,7 +106,7 @@ jobs:
         rm -f nova/Video/prime-release.jks nova/Video/keystore.properties
 
     - name: publish release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
       with:
         tag_name: prime-${{ steps.apks.outputs.code }}
         name: NovaPlayer Prime ${{ steps.apks.outputs.name }}
