@@ -65,6 +65,21 @@ jobs:
         repo sync -j 4
         repo forall -c 'git checkout -t $REPO_REMOTE/$REPO_RREV'
 
+    - name: wait for a new version number
+      # NOVA's versionCode only changes every 1000 seconds (see getDate() in Video/build.gradle).
+      # Two builds inside the same window would share one release tag, and the updater
+      # could then download the older APK. Wait until this build gets a code above every
+      # existing prime-* release (same formula as build.gradle; Gradle runs later, so >=).
+      env:
+        REPO_GIT: https://github.com/${{ github.repository }}
+      run: |
+        latest=$(git ls-remote --tags "$REPO_GIT" 'prime-*' | sed -nE 's#.*refs/tags/prime-([0-9]+)$#\1#p' | sort -n | tail -1)
+        latest=${latest:-0}
+        code() { echo $(( 2549909 + ( $(date +%s) - 1472637600 - 108380000 - 88364898 ) / 1000 )); }
+        echo "latest release code: $latest, current code: $(code)"
+        while [ "$(code)" -le "$latest" ]; do sleep 30; done
+        echo "building with code >= $(code)"
+
     - name: signing config
       env:
         KS: ${{ secrets.PRIME_KEYSTORE_BASE64 }}
