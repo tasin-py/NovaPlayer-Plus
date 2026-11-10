@@ -147,12 +147,6 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
         buildActions(actions);
     }
 
-    /** Bookmark lives in the side button column (D-pad right), never as the first list item. */
-    @Override
-    public void onCreateButtonActions(@NonNull List<GuidedAction> actions, Bundle savedInstanceState) {
-        buildButtonActions(actions);
-    }
-
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -289,12 +283,15 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
                             .multilineDescription(false)
                             .build());
                 }
+                // Last in the list, so a remote's double press never lands on it
+                actions.add(bookmarkAction(c, true));
                 break;
             case VIDEO:
                 actions.add(new GuidedAction.Builder(c)
                         .id(ID_PLAY)
                         .title(getString(R.string.prime_stream_play))
                         .build());
+                actions.add(bookmarkAction(c, false));
                 break;
             case ERROR:
                 actions.add(info(c, mError, null));
@@ -310,10 +307,6 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
                 }
                 break;
         }
-    }
-
-    private void buildButtonActions(List<GuidedAction> actions) {
-        if (mMode == Mode.FOLDER || mMode == Mode.VIDEO) actions.add(bookmarkAction(requireContext(), mMode == Mode.FOLDER));
     }
 
     private GuidedAction bookmarkAction(Context c, boolean folder) {
@@ -343,9 +336,6 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
         List<GuidedAction> actions = new ArrayList<>();
         buildActions(actions);
         setActions(actions);
-        List<GuidedAction> buttons = new ArrayList<>();
-        buildButtonActions(buttons);
-        setButtonActions(buttons);
         mShownAt = SystemClock.uptimeMillis();
         // Land on the first thing that can be clicked
         for (int i = 0; i < actions.size(); i++) {
@@ -357,13 +347,13 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
     }
 
     private void updateBookmarkAction() {
-        int pos = findButtonActionPositionById(ID_BOOKMARK);
+        int pos = findActionPositionById(ID_BOOKMARK);
         if (pos < 0) return;
         GuidedAction fresh = bookmarkAction(requireContext(), mMode == Mode.FOLDER);
-        GuidedAction a = getButtonActions().get(pos);
+        GuidedAction a = getActions().get(pos);
         a.setTitle(fresh.getTitle());
         a.setDescription(fresh.getDescription());
-        notifyButtonActionChanged(pos);
+        notifyActionChanged(pos);
     }
 
     @Override
