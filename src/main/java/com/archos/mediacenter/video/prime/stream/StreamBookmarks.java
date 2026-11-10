@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /** Bookmarked stream folders and videos. Kept until the user removes them (no expiry). */
@@ -50,7 +51,7 @@ public final class StreamBookmarks {
         return context.getApplicationContext().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
     }
 
-    /** Newest first. */
+    /** Sorted A to Z by name (ignoring case). */
     public static synchronized List<Entry> load(Context context) {
         List<Entry> result = new ArrayList<>();
         try {
@@ -65,6 +66,10 @@ public final class StreamBookmarks {
         } catch (JSONException ignored) {
             // unreadable: keep the stored text untouched rather than wiping bookmarks
         }
+        Collections.sort(result, (a, b) -> {
+            int c = a.name.compareToIgnoreCase(b.name);
+            return c != 0 ? c : a.url.compareTo(b.url);
+        });
         return result;
     }
 
