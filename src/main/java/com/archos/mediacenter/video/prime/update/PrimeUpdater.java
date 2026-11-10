@@ -167,23 +167,47 @@ public final class PrimeUpdater {
 
     /** Reads the tag of the latest release from the redirect of the normal releases page (no API). */
     static String latestTag() throws Exception {
-        HttpURLConnection c = (HttpURLConnection) new URL(PrimeConfig.LATEST_RELEASE_PAGE).openConnection();
+        String url = PrimeConfig.LATEST_RELEASE_PAGE;
+        // A renamed repo answers with a "moved" redirect to its new /releases/latest first:
+        // follow those (github.com, same owner, https only), at most 3 hops.
+        for (int hop = 0; hop < 4; hop++) {
+            String loc = latestRedirect(url);
+            int i = loc.indexOf("/releases/tag/");
+            if (i >= 0) {
+                String tag = loc.substring(i + "/releases/tag/".length());
+                int end = tag.indexOf('?');
+                if (end >= 0) tag = tag.substring(0, end);
+                if (!tag.matches("[A-Za-z0-9._-]+")) throw new Exception("Unexpected release tag");
+                return tag;
+            }
+            URL next = new URL(new URL(url), loc);
+            if (!isMovedRepoLatestPage(next)) return ""; // no release published yet
+            url = next.toString();
+        }
+        throw new Exception("Too many redirects");
+    }
+
+    /** True for https://github.com/&lt;same owner&gt;/&lt;repo&gt;/releases/latest (a renamed repo). */
+    static boolean isMovedRepoLatestPage(URL u) {
+        return "https".equals(u.getProtocol()) && "github.com".equalsIgnoreCase(u.getHost())
+                && (u.getPort() == -1 || u.getPort() == 443) && u.getQuery() == null
+                && u.getPath().matches("/" + java.util.regex.Pattern.quote(PrimeConfig.GITHUB_OWNER)
+                        + "/[A-Za-z0-9._-]+/releases/latest");
+    }
+
+    /** HEAD without following redirects; returns the Location header of the redirect. */
+    private static String latestRedirect(String url) throws Exception {
+        HttpURLConnection c = (HttpURLConnection) new URL(url).openConnection();
         try {
             c.setConnectTimeout(15000);
             c.setReadTimeout(30000);
             c.setInstanceFollowRedirects(false);
             c.setRequestMethod("HEAD");
-            c.setRequestProperty("User-Agent", "NovaPlayer-Prime-Updater");
+            c.setRequestProperty("User-Agent", "NovaPlayer-Plus-Updater");
             int code = c.getResponseCode();
             String loc = c.getHeaderField("Location");
             if (code < 300 || code >= 400 || loc == null) throw new Exception("HTTP " + code);
-            int i = loc.indexOf("/releases/tag/");
-            if (i < 0) return ""; // no release published yet
-            String tag = loc.substring(i + "/releases/tag/".length());
-            int end = tag.indexOf('?');
-            if (end >= 0) tag = tag.substring(0, end);
-            if (!tag.matches("[A-Za-z0-9._-]+")) throw new Exception("Unexpected release tag");
-            return tag;
+            return loc;
         } finally {
             c.disconnect();
         }
@@ -338,7 +362,7 @@ public final class PrimeUpdater {
             c.setConnectTimeout(15000);
             c.setReadTimeout(30000);
             c.setInstanceFollowRedirects(false);
-            c.setRequestProperty("User-Agent", "NovaPlayer-Prime-Updater");
+            c.setRequestProperty("User-Agent", "NovaPlayer-Plus-Updater");
             int code = c.getResponseCode();
             if (code >= 300 && code < 400) {
                 String loc = c.getHeaderField("Location");

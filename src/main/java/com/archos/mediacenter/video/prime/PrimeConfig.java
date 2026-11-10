@@ -27,7 +27,7 @@ public final class PrimeConfig {
     /** GitHub account owning the fork. */
     public static final String GITHUB_OWNER = "tasin-py";
     /** Repository whose GitHub Releases provide app updates. */
-    public static final String GITHUB_REPO = "NovaPlayer-Prime";
+    public static final String GITHUB_REPO = "NovaPlayer-Plus";
 
     public static final String GITHUB_PROFILE_URL = "https://github.com/" + GITHUB_OWNER;
     public static final String GITHUB_REPO_URL = GITHUB_PROFILE_URL + "/" + GITHUB_REPO;
