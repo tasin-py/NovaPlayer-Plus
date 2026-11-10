@@ -1215,6 +1215,15 @@ public class PlayerService extends Service implements Player.Listener, IndexHelp
                         : captureCurrentPosition(mPlayer != null && !mPlayer.isPaused());
                 if (log.isDebugEnabled()) log.debug("saveVideoStateIfReady: source={} position={} completed={}",
                         mPlaybackSession.selectedSource, resumePosition, mPlaybackSession.completed);
+                // Nova Player Plus: remember where streamed links (not in NOVA's library) were stopped
+                if (mUri != null && !PrivateMode.isActive()) {
+                    try {
+                        com.archos.mediacenter.video.prime.stream.StreamProgress.record(this, mUri.toString(),
+                                resumePosition, mPlayer != null ? mPlayer.getDuration() : -1);
+                    } catch (RuntimeException e) {
+                        log.warn("saveVideoStateIfReady: stream progress not saved", e);
+                    }
+                }
                 if (mVideoInfo != null && !PrivateMode.isActive()) {
                     mVideoInfo.resume = resumePosition;
                     int duration = mPlayer.getDuration();

@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * "Stream" screen: a link box, a Paste button, an Open button, bookmarks, and the links
+ * "Stream" screen: Continue watching (on top), a link box, a Paste button, an Open button, bookmarks, and the links
  * played in the last 30 days. Open shows the folder or video first ({@link StreamBrowseFragment}).
  * Uses the same GuidedStep look as NOVA's other TV screens.
  */
@@ -48,12 +48,16 @@ public class StreamFragment extends GuidedStepSupportFragment {
     private static final long ID_HISTORY_HEADER = 4;
     private static final long ID_CLEAR_HISTORY = 5;
     private static final long ID_BOOKMARKS_HEADER = 6;
+    private static final long ID_CONTINUE_HEADER = 7;
+    private static final long ID_CONTINUE_BASE = 500;
     private static final long ID_HISTORY_BASE = 1000;
     private static final long ID_BOOKMARK_BASE = 100000;
 
     private final List<StreamHistory.Entry> mHistory = new ArrayList<>();
     private final List<StreamBookmarks.Entry> mBookmarks = new ArrayList<>();
+    private final List<StreamProgress.Entry> mContinue = new ArrayList<>();
     private String mUrl = "";
+    private static final int MAX_CONTINUE = 10;
     private Overlay mOverlay;
 
     @NonNull
@@ -111,6 +115,34 @@ public class StreamFragment extends GuidedStepSupportFragment {
 
     private void buildActions(List<GuidedAction> actions) {
         Context c = requireActivity();
+
+        // On top: the streamed videos you stopped part way, newest first. Click resumes.
+        mContinue.clear();
+        mContinue.addAll(StreamProgress.resumable(c));
+        if (mContinue.size() > MAX_CONTINUE) mContinue.subList(MAX_CONTINUE, mContinue.size()).clear();
+        if (!mContinue.isEmpty()) {
+            actions.add(new GuidedAction.Builder(c)
+                    .id(ID_CONTINUE_HEADER)
+                    .title(getString(R.string.prime_stream_continue))
+                    .description(getString(R.string.prime_stream_continue_description))
+                    .infoOnly(true)
+                    .focusable(false)
+                    .build());
+            for (int i = 0; i < mContinue.size(); i++) {
+                StreamProgress.Entry e = mContinue.get(i);
+                String watched = e.duration > 0
+                        ? getString(R.string.prime_stream_watched, StreamProgress.formatTime(e.position), StreamProgress.formatTime(e.duration))
+                        : getString(R.string.prime_stream_watched_no_total, StreamProgress.formatTime(e.position));
+                actions.add(new GuidedAction.Builder(c)
+                        .id(ID_CONTINUE_BASE + i)
+                        .title(e.name)
+                        .description(watched + "  ·  " + DateUtils.getRelativeTimeSpanString(e.time,
+                                System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS))
+                        .multilineDescription(false)
+                        .build());
+            }
+        }
+
         actions.add(new GuidedAction.Builder(c)
                 .id(ID_URL)
                 .title(mUrl.isEmpty() ? getString(R.string.prime_stream_hint) : mUrl)
@@ -226,6 +258,17 @@ public class StreamFragment extends GuidedStepSupportFragment {
             StreamHistory.clear(requireActivity());
             rebuildActions();
             setSelectedActionPosition(findActionPositionById(ID_URL));
+        } else if (id >= ID_CONTINUE_BASE && id < ID_HISTORY_BASE) {
+            int index = (int) (id - ID_CONTINUE_BASE);
+            if (index >= 0 && index < mContinue.size()) {
+                StreamProgress.Entry e = mContinue.get(index);
+                StreamLink link = StreamLink.parse(e.url);
+                if (link == null) {
+                    Toast.makeText(requireActivity(), R.string.prime_stream_invalid, Toast.LENGTH_SHORT).show();
+                } else {
+                    StreamBrowseFragment.startPlayer(requireActivity(), link, e.url, e.name, e.position);
+                }
+            }
         } else if (id >= ID_BOOKMARK_BASE) {
             int index = (int) (id - ID_BOOKMARK_BASE);
             if (index >= 0 && index < mBookmarks.size()) {

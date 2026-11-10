@@ -48,8 +48,8 @@ import java.util.concurrent.Executors;
 
 /**
  * Shows what a stream link points to before anything plays:
- * a folder (bookmark button on top, then its sub-folders and videos) or
- * a video (title, size, Play and Bookmark). Same GuidedStep look as the rest of NOVA's TV screens.
+ * a folder (Search, its sub-folders and videos, then Bookmark) or
+ * a video (title, size, Resume or Play, then Bookmark). Same GuidedStep look as the rest of NOVA's TV screens.
  */
 public class StreamBrowseFragment extends GuidedStepSupportFragment {
 
@@ -71,6 +71,9 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
     private static final long ID_PLAY = 3;
     private static final long ID_RETRY = 4;
     private static final long ID_PLAY_ANYWAY = 5;
+    private static final long ID_RESUME = 6;
+    private static final long ID_SEARCH = 7;
+    private static final long ID_SEARCH_CLEAR = 8;
     private static final long ID_ITEM_BASE = 1000;
 
     private enum Mode { LOADING, FOLDER, VIDEO, ERROR }
@@ -93,6 +96,8 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
     private String mFileName;
     private String mError;
     private final List<FolderParser.Item> mItems = new ArrayList<>();
+    /** Folder search: only names containing every word are listed. Empty = everything. */
+    private String mQuery = "";
     /** When the current list appeared: presses right after it are a remote's double press. */
     private long mShownAt;
     private static final long DOUBLE_PRESS_GUARD_MS = 700;
@@ -166,8 +171,12 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
         super.onResume();
         if (mOverlay != null) mOverlay.resume();
         mShownAt = SystemClock.uptimeMillis();
-        // Bookmarks may have changed in a screen opened from here
-        if (mMode == Mode.FOLDER || mMode == Mode.VIDEO) updateBookmarkAction();
+        // Bookmarks and watched positions may have changed in a screen opened from here
+        if (mMode == Mode.FOLDER || mMode == Mode.VIDEO) {
+            int selected = getSelectedActionPosition();
+            refreshActions();
+            if (selected >= 0 && selected < getActions().size()) setSelectedActionPosition(selected);
+        }
     }
 
     @Override
@@ -271,11 +280,27 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
             case FOLDER:
                 if (mItems.isEmpty()) {
                     actions.add(info(c, getString(R.string.prime_stream_folder_empty), null));
+                } else {
+                    actions.add(new GuidedAction.Builder(c)
+                            .id(ID_SEARCH)
+                            .title(getString(R.string.prime_stream_search_folder))
+                            .description(mQuery.isEmpty() ? null : getString(R.string.prime_stream_search_showing, mQuery))
+                            .build());
+                    if (!mQuery.isEmpty()) {
+                        actions.add(new GuidedAction.Builder(c)
+                                .id(ID_SEARCH_CLEAR)
+                                .title(getString(R.string.prime_stream_search_clear))
+                                .build());
+                    }
                 }
+                int shown = 0;
                 for (int i = 0; i < mItems.size(); i++) {
                     FolderParser.Item item = mItems.get(i);
+                    if (!StreamSearch.matches(item.name, mQuery)) continue;
+                    shown++;
                     String desc = item.folder ? getString(R.string.prime_stream_folder_label)
-                            : join(getString(R.string.prime_stream_video_label), FolderParser.formatSize(item.size));
+                            : join(join(getString(R.string.prime_stream_video_label), FolderParser.formatSize(item.size)),
+                                    watched(StreamProgress.find(c, item.url)));
                     actions.add(new GuidedAction.Builder(c)
                             .id(ID_ITEM_BASE + i)
                             .title(item.folder ? item.name : stripExtension(item.name))
@@ -283,14 +308,30 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
                             .multilineDescription(false)
                             .build());
                 }
+                if (shown == 0 && !mItems.isEmpty()) {
+                    actions.add(info(c, getString(R.string.prime_stream_search_none, mQuery), null));
+                }
                 // Last in the list, so a remote's double press never lands on it
                 actions.add(bookmarkAction(c, true));
                 break;
             case VIDEO:
-                actions.add(new GuidedAction.Builder(c)
-                        .id(ID_PLAY)
-                        .title(getString(R.string.prime_stream_play))
-                        .build());
+                StreamProgress.Entry progress = StreamProgress.find(c, mUrl);
+                if (progress != null && progress.canResume()) {
+                    actions.add(new GuidedAction.Builder(c)
+                            .id(ID_RESUME)
+                            .title(getString(R.string.prime_stream_resume, StreamProgress.formatTime(progress.position)))
+                            .description(watched(progress))
+                            .build());
+                    actions.add(new GuidedAction.Builder(c)
+                            .id(ID_PLAY)
+                            .title(getString(R.string.prime_stream_play_from_start))
+                            .build());
+                } else {
+                    actions.add(new GuidedAction.Builder(c)
+                            .id(ID_PLAY)
+                            .title(getString(R.string.prime_stream_play))
+                            .build());
+                }
                 actions.add(bookmarkAction(c, false));
                 break;
             case ERROR:
@@ -318,6 +359,14 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
                 .title(title)
                 .description(getString(saved ? R.string.prime_stream_bookmarked : R.string.prime_stream_bookmark_hint))
                 .build();
+    }
+
+    /** "Watched 23:10 of 45:00", or null when there is nothing worth showing. */
+    private String watched(StreamProgress.Entry p) {
+        if (p == null || !p.canResume()) return null;
+        return p.duration > 0
+                ? getString(R.string.prime_stream_watched, StreamProgress.formatTime(p.position), StreamProgress.formatTime(p.duration))
+                : getString(R.string.prime_stream_watched_no_total, StreamProgress.formatTime(p.position));
     }
 
     private GuidedAction info(Context c, String title, String description) {
@@ -371,8 +420,28 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
                 Toast.makeText(c, R.string.prime_stream_bookmark_added, Toast.LENGTH_SHORT).show();
             }
             updateBookmarkAction();
+        } else if (id == ID_RESUME) {
+            StreamProgress.Entry p = StreamProgress.find(c, mUrl);
+            play(p != null ? p.position : 0);
         } else if (id == ID_PLAY || id == ID_PLAY_ANYWAY) {
-            play();
+            play(0);
+        } else if (id == ID_SEARCH) {
+            StreamSearch.ask(c, mQuery, query -> {
+                if (!isAdded()) return;
+                mQuery = query;
+                refreshActions();
+                // land on the first match
+                List<GuidedAction> list = getActions();
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).getId() >= ID_ITEM_BASE) {
+                        setSelectedActionPosition(i);
+                        break;
+                    }
+                }
+            });
+        } else if (id == ID_SEARCH_CLEAR) {
+            mQuery = "";
+            refreshActions();
         } else if (id == ID_RETRY) {
             load();
         } else if (id >= ID_ITEM_BASE) {
@@ -387,16 +456,25 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
         }
     }
 
-    private void play() {
-        Context c = requireContext();
+    private void play(int positionMs) {
         if (mLink == null) return;
-        StreamHistory.add(c, mUrl, displayName());
-        if (log.isDebugEnabled()) log.debug("play: {} -> {} ({})", mUrl, mLink.playUri, mLink.mimeType);
+        startPlayer(requireContext(), mLink, mUrl, displayName(), positionMs);
+    }
+
+    /**
+     * Starts NOVA's player on a stream link, from {@code positionMs} when it is above zero.
+     * The link is added to the recent streams and its watched position is tracked.
+     */
+    static void startPlayer(Context c, StreamLink link, String url, String name, int positionMs) {
+        StreamHistory.add(c, url, name);
+        StreamProgress.start(c, url, name, link.playUri.toString());
+        if (log.isDebugEnabled()) log.debug("play: {} -> {} ({}) from {}", url, link.playUri, link.mimeType, positionMs);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setClass(c, PlayerActivity.class);
-        intent.setDataAndType(mLink.playUri, mLink.mimeType);
+        intent.setDataAndType(link.playUri, link.mimeType);
+        if (positionMs > 0) intent.putExtra("position", positionMs); // NOVA's start position extra
         try {
-            startActivity(intent);
+            c.startActivity(intent);
         } catch (ActivityNotFoundException e) {
             log.error("play: cannot start player", e);
             Toast.makeText(c, R.string.prime_stream_invalid, Toast.LENGTH_SHORT).show();

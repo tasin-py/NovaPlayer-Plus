@@ -38,9 +38,14 @@ import java.util.List;
 public class StreamBookmarksFragment extends GuidedStepSupportFragment {
 
     private static final long ID_EMPTY = 1;
+    private static final long ID_SEARCH = 2;
+    private static final long ID_SEARCH_CLEAR = 3;
+    private static final long ID_NO_MATCH = 4;
     private static final long ID_BASE = 1000;
 
     private final List<StreamBookmarks.Entry> mEntries = new ArrayList<>();
+    /** Only bookmarks whose name contains every word are listed. Empty = all. */
+    private String mQuery = "";
     private Overlay mOverlay;
     /** When the list appeared: presses right after it are a remote's double press. */
     private long mShownAt;
@@ -80,10 +85,14 @@ public class StreamBookmarksFragment extends GuidedStepSupportFragment {
         mShownAt = android.os.SystemClock.uptimeMillis();
         // A bookmark may have been added or removed in a screen opened from here
         int selected = getSelectedActionPosition();
+        rebuild();
+        if (selected >= 0 && selected < getActions().size()) setSelectedActionPosition(selected);
+    }
+
+    private void rebuild() {
         List<GuidedAction> actions = new ArrayList<>();
         buildActions(actions);
         setActions(actions);
-        if (selected >= 0 && selected < actions.size()) setSelectedActionPosition(selected);
     }
 
     @Override
@@ -107,8 +116,22 @@ public class StreamBookmarksFragment extends GuidedStepSupportFragment {
                     .build());
             return;
         }
+        actions.add(new GuidedAction.Builder(c)
+                .id(ID_SEARCH)
+                .title(getString(R.string.prime_stream_search_bookmarks))
+                .description(mQuery.isEmpty() ? null : getString(R.string.prime_stream_search_showing, mQuery))
+                .build());
+        if (!mQuery.isEmpty()) {
+            actions.add(new GuidedAction.Builder(c)
+                    .id(ID_SEARCH_CLEAR)
+                    .title(getString(R.string.prime_stream_search_clear))
+                    .build());
+        }
+        int shown = 0;
         for (int i = 0; i < mEntries.size(); i++) {
             StreamBookmarks.Entry e = mEntries.get(i);
+            if (!StreamSearch.matches(e.name, mQuery)) continue;
+            shown++;
             String host = Uri.parse(e.url).getHost();
             String kind = getString(e.folder ? R.string.prime_stream_folder_label : R.string.prime_stream_video_label);
             actions.add(new GuidedAction.Builder(c)
@@ -118,11 +141,39 @@ public class StreamBookmarksFragment extends GuidedStepSupportFragment {
                     .multilineDescription(false)
                     .build());
         }
+        if (shown == 0) {
+            actions.add(new GuidedAction.Builder(c)
+                    .id(ID_NO_MATCH)
+                    .title(getString(R.string.prime_stream_search_none, mQuery))
+                    .infoOnly(true)
+                    .focusable(false)
+                    .build());
+        }
     }
 
     @Override
     public void onGuidedActionClicked(GuidedAction action) {
         if (android.os.SystemClock.uptimeMillis() - mShownAt < DOUBLE_PRESS_GUARD_MS) return; // remote double press
+        if (action.getId() == ID_SEARCH) {
+            StreamSearch.ask(requireContext(), mQuery, query -> {
+                if (!isAdded()) return;
+                mQuery = query;
+                rebuild();
+                List<GuidedAction> list = getActions();
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).getId() >= ID_BASE) {
+                        setSelectedActionPosition(i);
+                        break;
+                    }
+                }
+            });
+            return;
+        }
+        if (action.getId() == ID_SEARCH_CLEAR) {
+            mQuery = "";
+            rebuild();
+            return;
+        }
         int index = (int) (action.getId() - ID_BASE);
         if (index < 0 || index >= mEntries.size()) return;
         StreamBookmarks.Entry e = mEntries.get(index);

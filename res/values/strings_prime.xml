@@ -84,4 +84,17 @@
     <string name="prime_update_installing">Installing update… the app will close, then open it again</string>
     <string name="prime_update_failed">Update check failed (%1$s). Click to try again.</string>
     <string name="prime_update_failed_retry">Update failed (%1$s). Click to try again.</string>
+    <string name="prime_stream_continue">Continue watching</string>
+    <string name="prime_stream_continue_description">Picks up where you stopped</string>
+    <string name="prime_stream_watched">Watched %1$s of %2$s</string>
+    <string name="prime_stream_watched_no_total">Watched %1$s</string>
+    <string name="prime_stream_resume">Resume from %1$s</string>
+    <string name="prime_stream_play_from_start">Play from the start</string>
+    <string name="prime_stream_search">Search</string>
+    <string name="prime_stream_search_folder">Search in this folder</string>
+    <string name="prime_stream_search_bookmarks">Search bookmarks</string>
+    <string name="prime_stream_search_hint">Type a name, or use the mic</string>
+    <string name="prime_stream_search_showing">Showing results for \"%1$s\"</string>
+    <string name="prime_stream_search_clear">Show everything</string>
+    <string name="prime_stream_search_none">Nothing matches \"%1$s\"</string>
 </resources>
