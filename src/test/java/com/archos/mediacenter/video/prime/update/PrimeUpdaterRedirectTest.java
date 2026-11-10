@@ -1,5 +1,6 @@
 package com.archos.mediacenter.video.prime.update;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -35,5 +36,15 @@ public class PrimeUpdaterRedirectTest {
         assertFalse(ok("https://github.com/tasin-py/NovaPlayer-Plus/releases/latest?x=1"));
         assertFalse(ok("https://github.com:8443/tasin-py/NovaPlayer-Plus/releases/latest"));
         assertFalse(ok("https://github.com/login?return_to=/tasin-py/NovaPlayer-Plus/releases/latest"));
+    }
+
+    @Test
+    public void plusAndEarlyPrimeTagsAreUnderstood() {
+        assertEquals(2674900, PrimeUpdater.parseVersionCode("plus-2674900"));
+        assertEquals(2674812, PrimeUpdater.parseVersionCode("prime-2674812"));
+        assertEquals(-1, PrimeUpdater.parseVersionCode("v1.0"));
+        assertEquals(-1, PrimeUpdater.parseVersionCode(null));
+        assertEquals("NovaPlayerPlus-", PrimeUpdater.apkNamePrefix("plus-2674900"));
+        assertEquals("prime-", PrimeUpdater.apkNamePrefix("prime-2674812"));
     }
 }

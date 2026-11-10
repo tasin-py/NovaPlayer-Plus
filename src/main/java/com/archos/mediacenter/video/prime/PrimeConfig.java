@@ -39,11 +39,15 @@ public final class PrimeConfig {
     public static final String LATEST_RELEASE_PAGE = GITHUB_REPO_URL + "/releases/latest";
     public static final String RELEASE_TAG_PAGE = GITHUB_REPO_URL + "/releases/tag/";
     public static final String RELEASE_DOWNLOAD = GITHUB_REPO_URL + "/releases/download/";
-    /** Each release also carries "prime-&lt;abi&gt;.apk" so the file name is predictable. */
-    public static final String APK_NAME_PREFIX = "prime-";
+    /** Each release carries "NovaPlayerPlus-&lt;abi&gt;.apk", so the file name is predictable. */
+    public static final String APK_NAME_PREFIX = "NovaPlayerPlus-";
+    /** Early releases (tag "prime-…") carried "prime-&lt;abi&gt;.apk". */
+    public static final String LEGACY_APK_NAME_PREFIX = "prime-";
 
-    /** Release tags look like "prime-2675123": the number is the APK versionCode. */
-    public static final String RELEASE_TAG_PREFIX = "prime-";
+    /** Release tags look like "plus-2675123": the number is the APK versionCode. */
+    public static final String RELEASE_TAG_PREFIX = "plus-";
+    /** Tag prefix of the early releases, still understood by the updater. */
+    public static final String LEGACY_RELEASE_TAG_PREFIX = "prime-";
 
     /** "Buy me a coffee" page. */
     public static final String SUPPORT_URL = "https://www.supportkori.com/tasinpy";

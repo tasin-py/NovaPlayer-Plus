@@ -45,7 +45,7 @@ import java.util.concurrent.TimeUnit;
  * Checks the fork's GitHub Releases for a newer build and installs it in one click.
  * Uses only normal github.com links (no API, so no 60-requests-per-hour limit).
  *
- * Releases are tagged "prime-&lt;versionCode&gt;" by the GitHub Actions workflow and carry one APK per ABI.
+ * Releases are tagged "plus-&lt;versionCode&gt;" by the GitHub Actions workflow and carry one APK per ABI.
  * The APK is streamed straight into an Android PackageInstaller session (no file left behind) and
  * committed with "user action not required", so on Android 12+ updates after the first one install
  * without any confirmation screen. Android itself may still ask once (first self-update, or the
@@ -154,7 +154,7 @@ public final class PrimeUpdater {
                         .putLong(KEY_AVAILABLE_CODE, code)
                         .putString(KEY_AVAILABLE_NAME, releaseName(tag, code))
                         .putString(KEY_AVAILABLE_URL, PrimeConfig.RELEASE_DOWNLOAD + tag + "/"
-                                + PrimeConfig.APK_NAME_PREFIX + abi + ".apk")
+                                + apkNamePrefix(tag) + abi + ".apk")
                         .putLong(KEY_AVAILABLE_SIZE, -1)
                         .apply();
                 setState(State.AVAILABLE);
@@ -230,12 +230,21 @@ public final class PrimeUpdater {
     }
 
     static long parseVersionCode(String tag) {
-        if (tag == null || !tag.startsWith(PrimeConfig.RELEASE_TAG_PREFIX)) return -1;
+        if (tag == null) return -1;
+        String prefix = tag.startsWith(PrimeConfig.RELEASE_TAG_PREFIX) ? PrimeConfig.RELEASE_TAG_PREFIX
+                : tag.startsWith(PrimeConfig.LEGACY_RELEASE_TAG_PREFIX) ? PrimeConfig.LEGACY_RELEASE_TAG_PREFIX : null;
+        if (prefix == null) return -1;
         try {
-            return Long.parseLong(tag.substring(PrimeConfig.RELEASE_TAG_PREFIX.length()).trim());
+            return Long.parseLong(tag.substring(prefix.length()).trim());
         } catch (NumberFormatException e) {
             return -1;
         }
+    }
+
+    /** APK file name prefix used by the release with this tag ("plus-…" or the early "prime-…"). */
+    static String apkNamePrefix(String tag) {
+        return tag != null && tag.startsWith(PrimeConfig.LEGACY_RELEASE_TAG_PREFIX)
+                ? PrimeConfig.LEGACY_APK_NAME_PREFIX : PrimeConfig.APK_NAME_PREFIX;
     }
 
     private static final String[] RELEASE_ABIS = {"arm64-v8a", "armeabi-v7a", "x86_64", "x86"};
