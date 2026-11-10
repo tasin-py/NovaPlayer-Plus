@@ -4,8 +4,8 @@
 	branch = prime-video
 [submodule "MediaLib"]
 	path = MediaLib
-	url = https://github.com/nova-video-player/aos-MediaLib.git
-	branch = v6.6
+	url = https://github.com/tasin-py/NovaPlayer-Plus.git
+	branch = prime-medialib
 [submodule "FileCoreLibrary"]
 	path = FileCoreLibrary
 	url = https://github.com/nova-video-player/aos-FileCoreLibrary.git
