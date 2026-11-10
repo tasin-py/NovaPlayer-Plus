@@ -1,133 +1,228 @@
-# NOVA: opeN sOurce Video plAyer
+<div align="center">
 
-[![GitHub release](https://img.shields.io/github/v/release/nova-video-player/aos-AVP.svg?logo=github&label=GitHub&cacheSeconds=3600)](https://github.com/moneytoo/Player/releases/latest)
-[![GitHub downloads](https://img.shields.io/github/downloads/nova-video-player/aos-AVP/total?logo=github&cacheSeconds=3600)](https://github.com/nova-video-player/aos-AVP/releases/latest)
-[![Google Play version](https://img.shields.io/endpoint?color=green&logo=google-play&logoColor=white&url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Dorg.courville.nova%26gl%3DUS%26hl%3Den%26l%3DGoogle%2520Play%26m%3D%24version)](https://play.google.com/store/apps/details?id=org.courville.nova)
-[![Google Play rating](https://img.shields.io/endpoint?color=green&logo=google-play&url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Dorg.courville.nova%26l%3Drating%26m%3D%25E2%2598%2585%2520%24rating)](https://play.google.com/store/apps/details?id=org.courville.nova)
-[![Google Play downloads](https://img.shields.io/endpoint?color=green&logo=google-play&logoColor=white&url=https%3A%2F%2Fplay.cuzi.workers.dev%2Fplay%3Fi%3Dorg.courville.nova%26gl%3DUS%26hl%3Den%26l%3Ddownloads%26m%3D%24totalinstalls)](https://play.google.com/store/apps/details?id=org.courville.nova)
-[![Get it on Amazon Appstore](https://badgen.net/badge/Get%20it%20on/Amazon%20Appstore/689f38)](https://www.amazon.fr/dp/B07P1Q1DG9)
-[![Get it on F-Droid](https://img.shields.io/f-droid/v/org.courville.nova?logo=f-droid&label=F-Droid&cacheSeconds=3600)](https://f-droid.org/packages/org.courville.nova)
-[![Get it on IzzyOnDroid](https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/org.courville.nova&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAADAFBMVEUA0////wAA0v8A0v8A0////wD//wAFz/QA0/8A0/8A0/8A0/8A0v///wAA0/8A0/8A0/8A0/8A0//8/gEA0/8A0/8B0/4A0/8A0/8A0/+j5QGAwwIA0//C9yEA0/8A0/8A0/8A0/8A0/8A0/+n4SAA0/8A0/8A0/+o6gCw3lKt7QCv5SC+422b3wC19AC36zAA0/+d1yMA0/8A0/+W2gEA0/+w8ACz8gCKzgG7+QC+9CFLfwkA0/8A0////wAA0/8A0/8A0/8A0/+f2xym3iuHxCGq5BoA1P+m2joI0vONyiCz3mLO7oYA0/8M1Piq3Ei78CbB8EPe8LLj9Ly751G77zWQ1AC96UYC0fi37CL//wAA0/8A0////wD//wCp3jcA0/+j3SGj2i/I72Sx4zHE8FLB8zak1kYeycDI6nRl3qEA0/7V7psA0v6WzTa95mGi2RvB5XkPy9zH5YJ3uwGV1yxVihRLiwdxtQ1ZkAf//wD//wD//wD//wD//wCn5gf//wD//wD//wD//wD//wAA0/+h4A3R6p8A0/+X1w565OD6/ARg237n9csz2vPz+gNt37V/vifO8HW68B/L6ZOCwxXY8KRQsWRzhExAtG/E612a1Rd/pTBpmR9qjysduKVhmxF9mTY51aUozK+CsDSA52T//wD//wAA0////wD//wBJ1JRRxFWjzlxDyXRc0pGT1wCG0CWB3VGUzSTh8h6c0TSr5CCJ5FFxvl6s4H3m8xML0/DA5CvK51EX1N+Y2gSt4Dag3ChE3fax2ki68yO57NF10FRZnUPl88eJxhuCxgCz5EOLwEGf1DFutmahzGW98x0W1PGk3R154MHE6bOn69qv3gy92oG90o+Hn07B7rhCmiyMwECv1nO+0pQfwrCo57xF2daXsVhKrEdenQAduaee1Bsjr42z5D9RoCXy+QNovXpy2Z5MtWDO/TiSukaF3UtE1K6j3B4YwLc5wXlzpyIK0u5zy3uJqg4pu5RTpkZmpVKyAP8A0wBHcExHcEyBUSeEAAABAHRSTlP///9F9wjAAxD7FCEGzBjd08QyEL39abMd6///8P/ZWAnipIv/cC6B//7////////L/1Dz/0D///////86/vYnquY3/v///5T//v///17///////////////84S3QNB/8L/////////////7r/////NP////9l/////wPD4yis/x7Ym2lWSP+em////0n////////v///////////////////7//7pdGN3Urr6/+v/6aT////+//H/o2P/1v+7r7jp4PM/3p4g////g///K///481LxO///v////9w////8v/////9/p3J///a+P9v/5KR/+n///+p/xf//8P//wAAe7FyaAAABCZJREFUSMdj+E8iYKBUgwIHnwQ3N7cEHxcH+///VayoAE0Dh41qR7aBnCIQ8MsJKHH9/99czYYMWlA0cIkJGjMgAKfq//9RNYzIgLcBWYOTiCgDMhDn+B9bh6LebiWyH6L5UZQzONoAHWSHoqEpDkkDsyKqelv1//9rG1HUN9YihZK9AKp6BkG+/6xNqA5ajhSsCkrIipmYGGRa//9vQXVQXSySBnkWJOUMfn5Myuz/G3hR1NdEIUUchwiy+bkTsg4dbW/fu6W/e1c3XMMy5JiOZkFxUFZo74mgKTqaKXu0+2HqVwkja3BH9kFu361JwcHTfPJD4mdfe8ULAdVRyGlJAcVFfg+CQOozZ4XrJ85+JgwBsVXIGriQw5Tp4ZScezd8JiWnBupru30qwJZa+ZAjmWlC8fUZM4qB6kPnLNSPLMWqQQ5ZQ5aOzs1HmamBaQHzFs6y+qAmJCTE8f9/QgKSBg4DJPWc6zVDQkIC09JkZSPD38kukpExFpT4z67uYI/QwCOOCCK/izvu5CWl6AcEWMnKWml7LWbKZfH9/99UkknQHhGsynDz+65eWXv3/JmJrq5eXienVlRUfH/z8VvCf45soKQIH1yDEQsszrp6gwq9C73T87xcXadKl5TkFev4A/2tygmSBqYXqAYJmK+ZuoJydDR1vP09DA0NOy2kpdML81+U/heCpH1JU3jig7lJ5nKOT4i/t6ZHkqGzs4lJmIVHfrj+JR4HqLQSD0yDkCNEpGNn5ix9D03/eJdElTZdKV2TpNOhkwt8YUlNUgimgV0dLMBvf1gz1MolPd5FRcVNSkpDQ8owJeBCDyIhrIDnOD5QcuIU+3/2QKSs9laQ+noNLS0zLWdtqyP7mBAFAw88TwsJgMuJYweBGjYngtWbmeuZOW+bvNQToUFOAlFqOBk4Ov3/L7Z60/aN0p1tUhpa5nqWlub7C3p2I9QzyAghlUvczOz/1fhzPT3XSIfpSmmYAdVbmm1gV0dSz8DSilpUQsqCddIWIA3meuZaJqdMJZEzl6gRqgZIWZAxUdoizERXN8yi5MltcZTChzMaRQM3JNUWHS8rL/+yaPGvMmvr5ywoGoxtkDWwQ+Pb89ycBeWfGSJeL/la+RS1eOPnRtbQKgMRjZg+t8x6PkP273nWQAoFOPAgaeAThKXAmXMrK39Kmr5fsuBlBqoXfJGLe3VbmHjG9Mczi9T//3h7vygXtcDlQtJg44iQiIjIBRbGPO7gghPJy0ZIxT2HOLIUgwxQzsgYrUR350HSIMaJLidhgKY+mw+pflBDrX8E7OGBjPCAPc76gQFSTqAIiYrb/8dRP4CyosJ/rmwU5XIxHMilt4QBJwsSkBMClxOQULBlkRRwEONmR2kJcDGjADX2/+xO8r5iqjExqmLyrWpcPFRta1BfAwCtyN3XpuJ4RgAAAABJRU5ErkJggg==
-)](https://apt.izzysoft.de/fdroid/index/apk/org.courville.nova)
-[![Crowdin](https://badges.crowdin.net/nova-video-player/localized.svg)](https://crowdin.com/project/nova-video-player)
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/nova-video-player/aos-AVP/blob/nova/LICENSE.txt)
-[![Reddit Nova Community](https://img.shields.io/reddit/subreddit-subscribers/novavideoplayer?style=social)](https://www.reddit.com/r/NovaVideoPlayer/)
-[![Chat on irc](https://img.shields.io/badge/irc-%23novavideoplayer%20on%20libera.chat-FF55DD?style=flat&logo=liberadotchat&logoColor=FF55DD)](https://web.libera.chat/#novavideoplayer)
-![Build status](https://github.com/nova-video-player/aos-Video/workflows/NOVA%20CI/badge.svg)
-[![Donate paypal](https://img.shields.io/badge/donate_on-Paypal-blue?logo=paypal)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=software%40courville.org&lc=US&item_name=Nova+Video+Player+Donation&no_note=0&no_shipping=1&currency_code=EUR)
-[![Donate paypal](https://img.shields.io/badge/paypal-donate-yello.svg?logo=paypal)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=software%40courville.org&lc=US&item_name=Nova+Video+Player+Donation&no_note=0&no_shipping=1&currency_code=EUR)
-[![Donate liberapay](https://img.shields.io/badge/liberapay-donate-yellow.svg?logo=liberapay)](https://liberapay.com/NovaVideoPlayer/donate)
-[![Donate github sponsor](https://img.shields.io/badge/github-donate-yellow.svg?logo=github)](https://github.com/sponsors/courville)
-[![Donate opencollective](https://img.shields.io/badge/opencollective-donate-yellow.svg?logo=opencollective)](https://liberapay.com/NovaVideoPlayer/donate)
+<img src="https://raw.githubusercontent.com/tasin-py/NovaPlayer-Plus/prime/docs/banner.png" alt="Nova Player Plus by Tasin" width="600">
 
-## Overview
+<h1>Nova Player Plus</h1>
 
-NOVA is an open source video player for Android. It consists in a fork of the original Archos Video Player Community Edition that is hosted here: https://github.com/archos-sa/aos-AVP intended to support new features.
+<p><b>A premium video player for Android TV.</b><br>
+Stream any link, browse server folders, bookmark what you watch,<br>
+choose from eight themes, and update in one click.</p>
 
-Before asking any question please make sure that you have read the application [FAQ](https://github.com/nova-video-player/aos-AVP/blob/nova/faq/faq.md).
+<p>
+<a href="https://github.com/tasin-py/NovaPlayer-Plus/releases/latest"><img src="https://img.shields.io/github/v/release/tasin-py/NovaPlayer-Plus?label=latest%20release&logo=github&color=0b6aa8&style=for-the-badge" alt="Latest release"></a>
+<a href="https://github.com/tasin-py/NovaPlayer-Plus/releases"><img src="https://img.shields.io/github/downloads/tasin-py/NovaPlayer-Plus/total?label=downloads&logo=android&logoColor=white&color=2e7d32&style=for-the-badge" alt="Downloads"></a>
+</p>
+<p>
+<a href="https://github.com/tasin-py/NovaPlayer-Plus/actions/workflows/prime-release.yml"><img src="https://img.shields.io/github/actions/workflow/status/tasin-py/NovaPlayer-Plus/prime-release.yml?branch=prime&label=build&logo=githubactions&logoColor=white" alt="Build"></a>
+<img src="https://img.shields.io/badge/Android%20TV-6.0%2B-3ddc84?logo=androidtv&logoColor=white" alt="Android TV 6.0+">
+<a href="https://github.com/tasin-py/NovaPlayer-Plus/blob/prime/LICENSE.txt"><img src="https://img.shields.io/badge/license-Apache%202.0-blue" alt="Apache 2.0"></a>
+<a href="https://www.supportkori.com/tasinpy"><img src="https://img.shields.io/badge/support-buy%20me%20a%20coffee-ffdd00?logo=buymeacoffee&logoColor=black" alt="Buy me a coffee"></a>
+</p>
 
-This is the entry point repo. Its purpose is to provide the manifest to fetch all needed git repos with sources and then bootstrap the build environment.
+<h3>
+<a href="https://github.com/tasin-py/NovaPlayer-Plus/releases/latest">⬇ Download</a>
+&nbsp;·&nbsp; <a href="#-features">Features</a>
+&nbsp;·&nbsp; <a href="#-themes">Themes</a>
+&nbsp;·&nbsp; <a href="#-install">Install</a>
+&nbsp;·&nbsp; <a href="#-faq">FAQ</a>
+&nbsp;·&nbsp; <a href="#-support">Support</a>
+</h3>
 
-More interesting sources can be found there:
-- [Video](https://github.com/nova-video-player/aos-Video): nova's Video UI code
-- [MediaLib](https://github.com/nova-video-player/aos-MediaLib): nova's media library management code
-- [FileCoreLibrary](https://github.com/nova-video-player/aos-FileCoreLibrary): nova's file management code
-- [avos](https://github.com/nova-video-player/aos-avos): C core multimedia engine using ffmpeg
+</div>
 
-For the full list, please look at this manifest https://github.com/nova-video-player/aos-AVP/default.xml
+---
 
-## Building
+## ✨ Highlights
 
-Get the [repo tool](https://source.android.com/source/downloading), then type:
-```
-mkdir aos; cd aos
-repo init -u https://github.com/nova-video-player/aos-AVP -b nova
-repo sync -j4
-repo forall -c 'git checkout -t $REPO_REMOTE/$REPO_RREV'
-make
-```
+<table>
+<tr>
+<td align="center" width="25%"><h3>🔗</h3><b>Stream any link</b><br><sub>Paste it and play. Direct files, HLS, DASH, RTSP, Drive, Dropbox, OneDrive</sub></td>
+<td align="center" width="25%"><h3>📂</h3><b>Browse server folders</b><br><sub>Folder links open as a list you can explore</sub></td>
+<td align="center" width="25%"><h3>🔖</h3><b>Bookmarks</b><br><sub>Saved until you remove them, right on the home screen</sub></td>
+<td align="center" width="25%"><h3>🎨</h3><b>Eight themes</b><br><sub>Six premium themes plus the classic Blue and Black</sub></td>
+</tr>
+<tr>
+<td align="center"><h3>🎬</h3><b>Details first</b><br><sub>See title, size and server before anything plays</sub></td>
+<td align="center"><h3>⬆️</h3><b>One-click updates</b><br><sub>A red dot tells you, one press installs</sub></td>
+<td align="center"><h3>🏠</h3><b>Made for the couch</b><br><sub>Built for the TV remote, from home screen to settings</sub></td>
+<td align="center"><h3>🎞️</h3><b>All of NOVA inside</b><br><sub>Every NOVA feature, unchanged</sub></td>
+</tr>
+</table>
 
-Alternatively, for those not under Linux with a properly installed Android SDK/NDK, you can launch the video player build through:
-```
+## 🚀 Features
+
+### 🔗 Stream
+Open **Network › Stream**, then type or **Paste** a link and choose **Open**.
+
+- **Direct video files** (mkv, mp4, avi…) over http and https
+- **Live and adaptive streams:** HLS (`.m3u8`), DASH, RTSP, RTMP, UDP
+- **Cloud share links:** Google Drive, Dropbox and OneDrive links are turned into direct links automatically
+- **Recent streams** stay in a list for 30 days
+
+### 📂 Server folders
+Paste the link of a folder on a media server (h5ai, nginx, Apache and similar listings), and it opens as a browsable list:
+
+- Sub-folders first, then videos, each with its size
+- Open a sub-folder to keep exploring, the same way as on the website
+
+### 🎬 Details before playing
+A video never starts by surprise. Its page shows the **title, file name, size and server** first, with **Play** and **Bookmark**.
+
+### 🔖 Bookmarks
+- **Bookmark this folder** sits at the top of every folder; **Bookmark this video** sits under Play
+- Bookmarks are kept until you remove them
+- Find them in two places: on the **Stream** screen, and in **Bookmarked** on the home screen
+
+### 🏠 Home screen
+- **Network & Files** is the 2nd row, right under *Recently added*
+- **Bookmarked** sits right next to *Network*, one click away
+
+### ⬆️ One-click updates
+- Checks for a new version at most every 6 hours, or on demand with **Settings › Nova Player Plus › Check for updates**
+- A **red dot** on Settings means an update is ready; **Update now** downloads and installs it
+- Picks the right file for your device automatically and only downloads from GitHub over HTTPS
+
+### 🎞️ Everything from NOVA
+Nova Player Plus keeps every feature of NOVA Video Player, untouched: local and network playback (SMB, UPnP, FTP, SFTP, WebDAV and more), hardware decoding, subtitles, audio passthrough, resume where you left off, automatic movie and TV show info with posters, and much more.
+
+## 🎨 Themes
+
+Choose in **Preferences › Theme**. Each theme recolors the background, side menu, tiles, highlights, progress bars and settings.
+
+<div align="center">
+<img src="https://raw.githubusercontent.com/tasin-py/NovaPlayer-Plus/prime/docs/themes.png" alt="The six premium themes" width="900">
+</div>
+
+| Theme | Style |
+|---|---|
+| **Noir Gold** | Deep black and gold, like a classic cinema |
+| **Royal Burgundy** | Rich wine red with champagne gold |
+| **Emerald Velvet** | Dark emerald green with soft gold |
+| **Midnight Silver** | Midnight navy with silver |
+| **Mahogany Copper** | Warm dark wood with copper |
+| **Imperial Purple** | Royal purple with gold |
+| Blue · Black | NOVA's original themes |
+
+## 📥 Install
+
+1. Open the **[latest release](https://github.com/tasin-py/NovaPlayer-Plus/releases/latest)**.
+2. Download the file for your device:
+
+   | Your device | Download |
+   |---|---|
+   | **Most Android TVs** (TCL, Sony, Philips, Hisense…) | `prime-armeabi-v7a.apk` |
+   | **Newer TVs, Google TV, phones and tablets** | `prime-arm64-v8a.apk` |
+   | Emulators and PCs | `prime-x86_64.apk` · `prime-x86.apk` |
+
+   Not sure? Try `prime-armeabi-v7a.apk` first. It works on almost every TV.
+3. Open the file to install it. You may need to allow installing from unknown sources once.
+4. Done. Future updates come through **Check for updates**.
+
+### Works on
+| ✅ Supported | ❌ Not supported |
+|---|---|
+| Android TV and Google TV (Android 6.0 or newer) | LG TVs (webOS) |
+| Chromecast with Google TV, Google TV Streamer | Samsung TVs (Tizen) |
+| Amazon Fire TV sticks and boxes (by sideloading) | Roku |
+| Android boxes, phones and tablets | Apple TV |
+
+> **Have an LG, Samsung or other non-Android TV?** Plug an Android streaming stick into an HDMI port, such as a Chromecast with Google TV, a Fire TV Stick or a Mi Box, and install Nova Player Plus on it.
+
+## ❓ FAQ
+
+<details>
+<summary><b>I already have NOVA Video Player. Can I install both?</b></summary>
+<br>
+No. Nova Player Plus replaces NOVA, because both use the same app ID. Uninstall NOVA first, then install Nova Player Plus. Your NOVA library and settings won't carry over.
+</details>
+
+<details>
+<summary><b>How do I update?</b></summary>
+<br>
+Go to <b>Settings › Nova Player Plus › Check for updates</b>. When an update is available, Settings shows a red dot and <b>Update now</b> installs it. You can also download the newest file from the <a href="https://github.com/tasin-py/NovaPlayer-Plus/releases/latest">latest release</a> and install it over the old one.
+</details>
+
+<details>
+<summary><b>A link won't play. What can I do?</b></summary>
+<br>
+Make sure the link is complete, with nothing extra copied before or after it, and that it points to a video or a folder, not a web page. If the server is slow or busy, try again later. If the details page can't read the file, choose <b>Try to play it anyway</b>.
+</details>
+
+<details>
+<summary><b>Does it collect any data?</b></summary>
+<br>
+Nova Player Plus adds no tracking or ads. Its own features only contact GitHub (to check for updates) and the links you choose to open. NOVA's online features, like fetching movie posters and info, work exactly as they do in NOVA.
+</details>
+
+## 🛠 For developers
+
+<details>
+<summary><b>How the code is organised</b></summary>
+<br>
+
+| Branch | Contents |
+|---|---|
+| `prime` | Build setup: the `prime.xml` manifest and the release workflow |
+| `prime-video` | The app itself. Nova Player Plus code is in `src/main/java/com/archos/mediacenter/video/prime/` |
+| `nova` | NOVA's original repository, kept for reference |
+
+The fork's code lives in its own `prime` package and its own resource files.
+NOVA's files only get a few small hooks marked `// NovaPlayer Prime`, so merging NOVA updates stays simple.
+</details>
+
+<details>
+<summary><b>Building and releasing</b></summary>
+<br>
+
+Releases are built on **GitHub Actions**. Every push to `prime` builds signed APKs and publishes a release tagged `prime-<versionCode>`; you can also run *Actions › NovaPlayer Prime release › Run workflow*.
+
+Signing uses four repository secrets: `PRIME_KEYSTORE_BASE64`, `PRIME_KEYSTORE_PASSWORD`, `PRIME_KEY_ALIAS` and `PRIME_KEY_PASSWORD`.
+Always use the same keystore: Android refuses updates signed with a different key.
+</details>
+
+<details>
+<summary><b>Pulling in NOVA updates</b></summary>
+<br>
+
+```bash
 cd Video
-./gradlew -Puniversal assembleNoamazonRelease
+git fetch https://github.com/nova-video-player/aos-Video.git v6.6
+git merge FETCH_HEAD
+git push https://github.com/tasin-py/NovaPlayer-Plus.git HEAD:prime-video
 ```
 
-In order to speed up the build, build is performed using dav1d, ffmpeg and other pre-built binaries and using local git clone of ffmpeg and dav1d repos. In order to trigger full update rebuild, you need in case of version upstep to manually do:
-```
-rm -rf native/torrentd/libs
-cd native/dav1d-android-builder; git clean -fdx; rm -rf built-*
-cd native/ffmpeg-android-builder; git clean -fdx; rm -rf dist-*
-```
+When NOVA moves to a new branch (for example v6.7), update the revisions in `prime.xml` to match their newest manifest.
+</details>
 
-Note that the following packages are required to build:
-```
-sudo curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo
-sudo chmod a+x /usr/local/bin/repo
-sudo apt install build-essential python3 python3-pip python3-setuptools ninja-build maven file wget curl unzip git pkg-config meson nasm openjdk-17-jdk-headless openjdk-8-jdk-headless
-```
+## 💛 Support
 
-Alternatively, you can use the provided docker image to build nova:
-```
-cd nova/AVP/docker
-docker build -t nova .
-docker run --rm -ti --entrypoint=/bin/bash nova
-make
-```
+If Nova Player Plus makes your evenings better, you can support its development:
 
-Github workflow build configuration file is also provided [here](https://github.com/nova-video-player/aos-Video/blob/v6.2/.github/workflows/nova.yml)
+<div align="center">
 
-Binaries prebuilt of torrentd, ffmpeg, dav1d have been committed in order to reduce compilation time and remove nasm, meson dependencies. If you need to regenerate torrentd, ffmpeg and dav1d libs, please run `make clean_prebuilt`.
+<a href="https://www.supportkori.com/tasinpy"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-supportkori.com%2Ftasinpy-ffdd00?style=for-the-badge&logo=buymeacoffee&logoColor=black" alt="Buy me a coffee"></a>
+<a href="https://github.com/tasin-py"><img src="https://img.shields.io/badge/GitHub-tasin--py-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub tasin-py"></a>
 
-## Latest stable apk
+⭐ **Starring this repository** also helps other people find it.<br>
+Found a bug or have an idea? [Open an issue](https://github.com/tasin-py/NovaPlayer-Plus/issues).
 
-The compiled application is available for installation on:
+</div>
 
-| Google Play | Amazon Appstore | GitHub | IzzyOnDroid | F‑Droid |
-|:--:|:--:|:--:|:--:|:--:|
-| [<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" alt="Get it on Google Play" height="60">](https://play.google.com/store/apps/details?id=org.courville.nova) | [<img src="https://images-na.ssl-images-amazon.com/images/G/01/mobile-apps/devportal2/res/images/amazon-appstore-badge-english-black.png" alt="Get it on Amazon Appstore" height="41">](http://www.amazon.com/gp/mas/dl/android?p=org.courville.nova) | [<img src="https://raw.githubusercontent.com/machiav3lli/oandbackupx/034b226cea5c1b30eb4f6a6f313e4dadcbb0ece4/badge_github.png" alt="Get it on GitHub" height="60">](https://github.com/nova-video-player/aos-AVP/releases) | [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" alt="Get it on IzzyOnDroid" height="60">](https://apt.izzysoft.de/fdroid/index/apk/org.courville.nova) | [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="60">](https://f-droid.org/packages/org.courville.nova/) |
+## 🙏 Credits
 
+Nova Player Plus is built on **NOVA Video Player**, the open-source video player by the NOVA developers (Courville Software and contributors), which grew out of the **Archos Video Player** Community Edition. All credit for the player, its media engine and every original feature goes to them.
 
-But for me the best way to get the latest nova video player apk is through [obtainium](https://github.com/ImranR98/Obtainium) which I recommend to use.
+Forked, designed and maintained by **[tasin-py](https://github.com/tasin-py)**.
 
-## Scraping and Scrobbling
+| Original project | Link |
+|---|---|
+| NOVA Video Player | [github.com/nova-video-player/aos-AVP](https://github.com/nova-video-player/aos-AVP) |
+| NOVA's app code | [github.com/nova-video-player/aos-Video](https://github.com/nova-video-player/aos-Video) |
+| Support the NOVA developers | [liberapay.com/NovaVideoPlayer](https://liberapay.com/NovaVideoPlayer/donate) |
+| Archos Video Player (the origin) | [github.com/archos-sa/aos-AVP](https://github.com/archos-sa/aos-AVP) |
 
-Scraping and scrobbling features rely on external services such as [**TMDb**](https://www.themoviedb.org/) and [**Trakt**](https://trakt.tv).
-
-In order to enable NOVA video player to perform these tasks, you need to register to this services and enable the API and inject the corresponding keys inside the following files: *MediaLib/src/community/res/values/donottranslate.xml*
-replacing the fake values below:
-```xml
-    <?xml version="1.0" encoding="utf-8"?>
-    <resources xmlns:android="http://schemas.android.com/apk/res/android">
-        <string name="tmdb_api_key">0123456789abcdef0123456789abcdef</string>
-        <string name="trakt_api_key">0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef</string>
-        <string name="trakt_api_secret">0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef</string>
-    </resources>
-```
-
-Please note that enabling **TMDB** API registration can be completed following this [link](https://www.themoviedb.org/settings/api).
-
-To create a **Trakt** api, first register to trakt then add a new app [here](https://trakt.tv/oauth/applications).
-
-Redirect URI should be http://localhost and be aware to grant all permissions.
-
-## Localization
-
-You are welcome to contribute to the translation of the application using crowdin platform [here](https://crowdin.com/project/nova-video-player).
-
-## Donate
-
-Any contribution to show your gratitude and appreciation is always welcome, keeping the small team of developers working on their personal time motivated and aware that their dedication means something.
-
-If you are up for it, please use any of the following links to make a donation: [paypal](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=software%40courville.org&lc=US&item_name=Nova+Video+Player+Donation&no_note=0&no_shipping=1&currency_code=EUR), [liberapay](https://liberapay.com/NovaVideoPlayer/donate), [github sponsor](https://github.com/sponsors/courville) and [opencollective](https://opencollective.com/novavideoplayer).
-
-Funds collected are essentially used to buy devices on which problems are reported for analysis and fix in order to cope with Android fragmentation.
-
-Please bear in mind that the work carried out here results from a small community effort done with good will on scarce personal time.
-If need be, we might in the future introduce some extra bounty programs for specific feature development requests.
-
-## Support community and chat room
-
-[NovaVideoPlayer reddit community](https://www.reddit.com/r/NovaVideoPlayer) community is used as the support community for the Nova Video Player application.
-It is possible to chat with Nova Video Player developers on [#novavideoplayer liberachat IRC channel](https://web.libera.chat/).
-
+<div align="center">
+<br>
+<sub>Licensed under the <a href="https://github.com/tasin-py/NovaPlayer-Plus/blob/prime/LICENSE.txt">Apache License 2.0</a>, like NOVA.<br>
+Made with ❤️ by Tasin</sub>
+</div>
