@@ -7,13 +7,13 @@
 **A premium Android TV video player, built on NOVA Video Player.**
 Stream any link, browse server folders, bookmark what you love, and update in one click.
 
-[![Latest release](https://img.shields.io/github/v/release/tasin-py/NovaPlayer-Prime?label=latest&logo=github&color=0b6aa8)](https://github.com/tasin-py/NovaPlayer-Prime/releases/latest)
-[![Build](https://img.shields.io/github/actions/workflow/status/tasin-py/NovaPlayer-Prime/prime-release.yml?branch=prime&label=build&logo=githubactions&logoColor=white)](https://github.com/tasin-py/NovaPlayer-Prime/actions/workflows/prime-release.yml)
+[![Latest release](https://img.shields.io/github/v/release/tasin-py/NovaPlayer-Plus?label=latest&logo=github&color=0b6aa8)](https://github.com/tasin-py/NovaPlayer-Plus/releases/latest)
+[![Build](https://img.shields.io/github/actions/workflow/status/tasin-py/NovaPlayer-Plus/prime-release.yml?branch=prime&label=build&logo=githubactions&logoColor=white)](https://github.com/tasin-py/NovaPlayer-Plus/actions/workflows/prime-release.yml)
 [![Platform](https://img.shields.io/badge/platform-Android%20TV%20%7C%20Android-3ddc84?logo=android&logoColor=white)](#install)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE.txt)
 [![Based on NOVA](https://img.shields.io/badge/based%20on-NOVA%20Video%20Player-1565c0)](https://github.com/nova-video-player/aos-AVP)
 
-[**Download**](https://github.com/tasin-py/NovaPlayer-Prime/releases/latest) ·
+[**Download**](https://github.com/tasin-py/NovaPlayer-Plus/releases/latest) ·
 [What's new](#whats-new-in-this-fork) ·
 [Features](#features) ·
 [Themes](#themes) ·
@@ -109,7 +109,7 @@ Stream any link, browse server folders, bookmark what you love, and update in on
 
 ## Install
 
-1. Open the [**latest release**](https://github.com/tasin-py/NovaPlayer-Prime/releases/latest).
+1. Open the [**latest release**](https://github.com/tasin-py/NovaPlayer-Plus/releases/latest).
 2. Download the APK for your device:
 
    | Device | File |
@@ -152,7 +152,7 @@ To build locally, follow NOVA's instructions in [README-NOVA.md](README-NOVA.md#
 cd Video
 git fetch https://github.com/nova-video-player/aos-Video.git v6.6
 git merge FETCH_HEAD
-git push https://github.com/tasin-py/NovaPlayer-Prime.git HEAD:prime-video
+git push https://github.com/tasin-py/NovaPlayer-Plus.git HEAD:prime-video
 ```
 
 When NOVA moves to a new branch (for example v6.7), update the revisions in `prime.xml` to match their newest manifest.

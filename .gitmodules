@@ -1,6 +1,6 @@
 [submodule "Video"]
 	path = Video
-	url = https://github.com/tasin-py/NovaPlayer-Prime.git
+	url = https://github.com/tasin-py/NovaPlayer-Plus.git
 	branch = prime-video
 [submodule "MediaLib"]
 	path = MediaLib
