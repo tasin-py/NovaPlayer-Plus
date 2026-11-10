@@ -110,11 +110,11 @@ Choose in **Preferences › Theme**. Each theme recolors the background, side me
 
    | Your device | Download |
    |---|---|
-   | **Most Android TVs** (TCL, Sony, Philips, Hisense…) | `prime-armeabi-v7a.apk` |
-   | **Newer TVs, Google TV, phones and tablets** | `prime-arm64-v8a.apk` |
-   | Emulators and PCs | `prime-x86_64.apk` · `prime-x86.apk` |
+   | **Most Android TVs** (TCL, Sony, Philips, Hisense…) | `NovaPlayerPlus-armeabi-v7a.apk` |
+   | **Newer TVs, Google TV, phones and tablets** | `NovaPlayerPlus-arm64-v8a.apk` |
+   | Emulators and PCs | `NovaPlayerPlus-x86_64.apk` · `NovaPlayerPlus-x86.apk` |
 
-   Not sure? Try `prime-armeabi-v7a.apk` first. It works on almost every TV.
+   Not sure? Try `NovaPlayerPlus-armeabi-v7a.apk` first. It works on almost every TV.
 3. Open the file to install it. You may need to allow installing from unknown sources once.
 4. Done. Future updates come through **Check for updates**.
 
@@ -128,23 +128,24 @@ Choose in **Preferences › Theme**. Each theme recolors the background, side me
 
 > ➡️ **Have an LG, Samsung or other non-Android TV?** Plug an Android streaming stick into an HDMI port, such as a Chromecast with Google TV, a Fire TV Stick or a Mi Box, and install Nova Player Plus on it.
 
-## Why does Nova Player Plus replace NOVA Video Player?
+## Nova Player Plus and NOVA Video Player
 
-**Nova Player Plus is a separate, independent project.** It's made by tasin-py, built on NOVA's open-source code. It isn't an official NOVA release, and the NOVA developers don't run or support it.
+**Nova Player Plus is a separate, independent app.** It's made by tasin-py, built on NOVA's open-source code. It isn't an official NOVA release, and the NOVA developers don't run or support it.
 
-**It replaces NOVA on your device** for one technical reason. Nova Player Plus still uses NOVA's app ID (`org.courville.nova`) and the names of NOVA's media library inside Android. Android allows only one app with those names, so the two can't be installed side by side: you use one or the other.
+**It has its own identity on your device.** Nova Player Plus uses its own app ID (`com.tasinpy.novaplayerplus`) and its own media library, so it never replaces or touches NOVA:
 
-**What that means for you:**
-- Uninstall NOVA before installing Nova Player Plus. Android refuses to install it over NOVA, because the two are signed by different developers.
-- Your NOVA library, watch history and settings don't carry over. Nova Player Plus rescans your videos and starts fresh.
-- To go back to NOVA, uninstall Nova Player Plus and install NOVA from its usual store.
+- ✅ Install it **next to NOVA Video Player**. Both keep working, each with its own library and settings.
+- ✅ Nothing to uninstall first, and NOVA's updates keep coming from its usual store.
+- ✅ Remove either one any time without affecting the other.
+
+> ➡️ **Installed Nova Player Plus before 10 November 2026?** Those early versions can't update to the new app by themselves. Install the [latest release](https://github.com/tasin-py/NovaPlayer-Plus/releases/latest), then uninstall the old one.
 
 ## FAQ
 
 <details>
 <summary><b>I already have NOVA Video Player. Can I install both?</b></summary>
 <br>
-No, not at the same time. Uninstall NOVA first, then install Nova Player Plus. See <a href="#why-does-nova-player-plus-replace-nova-video-player">why it replaces NOVA</a>.
+Yes. Nova Player Plus is a separate app, so both work side by side, each with its own library and settings. See <a href="#nova-player-plus-and-nova-video-player">Nova Player Plus and NOVA</a>.
 </details>
 
 <details>
@@ -185,7 +186,7 @@ NOVA's files only get a few small hooks marked `// NovaPlayer Prime`, so merging
 <summary><b>Building and releasing</b></summary>
 <br>
 
-Releases are built on **GitHub Actions**. Every push to `prime` builds signed APKs and publishes a release tagged `prime-<versionCode>`; you can also run *Actions › NovaPlayer Prime release › Run workflow*.
+Releases are built on **GitHub Actions**. Every push to `prime` builds signed APKs and publishes a release tagged `plus-<versionCode>`; you can also run *Actions › Nova Player Plus release › Run workflow*.
 
 Signing uses four repository secrets: `PRIME_KEYSTORE_BASE64`, `PRIME_KEYSTORE_PASSWORD`, `PRIME_KEY_ALIAS` and `PRIME_KEY_PASSWORD`.
 Always use the same keystore: Android refuses updates signed with a different key.
