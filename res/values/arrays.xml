@@ -266,10 +266,24 @@
     <string-array name="theme_selection_entries" translatable="false">
         <item>@string/theme_blue</item>
         <item>@string/theme_black</item>
+        <!-- NovaPlayer Prime themes -->
+        <item>@string/prime_theme_gold</item>
+        <item>@string/prime_theme_burgundy</item>
+        <item>@string/prime_theme_emerald</item>
+        <item>@string/prime_theme_midnight</item>
+        <item>@string/prime_theme_mahogany</item>
+        <item>@string/prime_theme_purple</item>
     </string-array>
 
     <string-array name="theme_selection_entryvalues">
         <item>blue</item>
         <item>black</item>
+        <!-- NovaPlayer Prime themes -->
+        <item>gold</item>
+        <item>burgundy</item>
+        <item>emerald</item>
+        <item>midnight</item>
+        <item>mahogany</item>
+        <item>purple</item>
     </string-array>
 </resources>

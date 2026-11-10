@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- NovaPlayer Prime: extra premium themes (styles), modelled on MyLeanbackTheme.Black -->
+<resources>
+    <!-- Noir Gold -->
+    <style name="MyLeanbackTheme.PrimeGold" parent="Theme.Leanback">
+        <item name="android:windowBackground">@color/prime_theme_gold_background</item>
+        <item name="android:windowEnterTransition">@android:transition/fade</item>
+        <item name="android:windowExitTransition">@android:transition/fade</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="colorPrimary">@color/prime_theme_gold_primary</item>
+        <item name="colorPrimaryDark">@color/prime_theme_gold_gradient_start</item>
+        <item name="colorAccent">@color/prime_theme_gold_accent</item>
+        <item name="alertDialogTheme">@style/Theme.AlertDialog.Black</item>
+        <item name="detailsActionButtonStyle">@style/MyDetailsActionButtonStyle</item>
+    </style>
+    <style name="MyLeanbackTheme.Preferences.PrimeGold" parent="Theme.Leanback">
+        <item name="preferenceTheme">@style/MyLeanbackPreferenceTheme.PrimeGold</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="alertDialogTheme">@style/Theme.AlertDialog.Black</item>
+    </style>
+    <style name="MyLeanbackPreferenceTheme.PrimeGold" parent="PreferenceThemeOverlayLeanback">
+        <item name="android:windowBackground">@color/prime_theme_gold_background</item>
+        <item name="colorPrimary">@color/prime_theme_gold_header</item>
+        <item name="android:colorPrimary">@color/prime_theme_gold_header</item>
+    </style>
+    <!-- Royal Burgundy -->
+    <style name="MyLeanbackTheme.PrimeBurgundy" parent="Theme.Leanback">
+        <item name="android:windowBackground">@color/prime_theme_burgundy_background</item>
+        <item name="android:windowEnterTransition">@android:transition/fade</item>
+        <item name="android:windowExitTransition">@android:transition/fade</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="colorPrimary">@color/prime_theme_burgundy_primary</item>
+        <item name="colorPrimaryDark">@color/prime_theme_burgundy_gradient_start</item>
+        <item name="colorAccent">@color/prime_theme_burgundy_accent</item>
+        <item name="alertDialogTheme">@style/Theme.AlertDialog.Black</item>
+        <item name="detailsActionButtonStyle">@style/MyDetailsActionButtonStyle</item>
+    </style>
+    <style name="MyLeanbackTheme.Preferences.PrimeBurgundy" parent="Theme.Leanback">
+        <item name="preferenceTheme">@style/MyLeanbackPreferenceTheme.PrimeBurgundy</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="alertDialogTheme">@style/Theme.AlertDialog.Black</item>
+    </style>
+    <style name="MyLeanbackPreferenceTheme.PrimeBurgundy" parent="PreferenceThemeOverlayLeanback">
+        <item name="android:windowBackground">@color/prime_theme_burgundy_background</item>
+        <item name="colorPrimary">@color/prime_theme_burgundy_header</item>
+        <item name="android:colorPrimary">@color/prime_theme_burgundy_header</item>
+    </style>
+    <!-- Emerald Velvet -->
+    <style name="MyLeanbackTheme.PrimeEmerald" parent="Theme.Leanback">
+        <item name="android:windowBackground">@color/prime_theme_emerald_background</item>
+        <item name="android:windowEnterTransition">@android:transition/fade</item>
+        <item name="android:windowExitTransition">@android:transition/fade</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="colorPrimary">@color/prime_theme_emerald_primary</item>
+        <item name="colorPrimaryDark">@color/prime_theme_emerald_gradient_start</item>
+        <item name="colorAccent">@color/prime_theme_emerald_accent</item>
+        <item name="alertDialogTheme">@style/Theme.AlertDialog.Black</item>
+        <item name="detailsActionButtonStyle">@style/MyDetailsActionButtonStyle</item>
+    </style>
+    <style name="MyLeanbackTheme.Preferences.PrimeEmerald" parent="Theme.Leanback">
+        <item name="preferenceTheme">@style/MyLeanbackPreferenceTheme.PrimeEmerald</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="alertDialogTheme">@style/Theme.AlertDialog.Black</item>
+    </style>
+    <style name="MyLeanbackPreferenceTheme.PrimeEmerald" parent="PreferenceThemeOverlayLeanback">
+        <item name="android:windowBackground">@color/prime_theme_emerald_background</item>
+        <item name="colorPrimary">@color/prime_theme_emerald_header</item>
+        <item name="android:colorPrimary">@color/prime_theme_emerald_header</item>
+    </style>
+    <!-- Midnight Silver -->
+    <style name="MyLeanbackTheme.PrimeMidnight" parent="Theme.Leanback">
+        <item name="android:windowBackground">@color/prime_theme_midnight_background</item>
+        <item name="android:windowEnterTransition">@android:transition/fade</item>
+        <item name="android:windowExitTransition">@android:transition/fade</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="colorPrimary">@color/prime_theme_midnight_primary</item>
+        <item name="colorPrimaryDark">@color/prime_theme_midnight_gradient_start</item>
+        <item name="colorAccent">@color/prime_theme_midnight_accent</item>
+        <item name="alertDialogTheme">@style/Theme.AlertDialog.Black</item>
+        <item name="detailsActionButtonStyle">@style/MyDetailsActionButtonStyle</item>
+    </style>
+    <style name="MyLeanbackTheme.Preferences.PrimeMidnight" parent="Theme.Leanback">
+        <item name="preferenceTheme">@style/MyLeanbackPreferenceTheme.PrimeMidnight</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="alertDialogTheme">@style/Theme.AlertDialog.Black</item>
+    </style>
+    <style name="MyLeanbackPreferenceTheme.PrimeMidnight" parent="PreferenceThemeOverlayLeanback">
+        <item name="android:windowBackground">@color/prime_theme_midnight_background</item>
+        <item name="colorPrimary">@color/prime_theme_midnight_header</item>
+        <item name="android:colorPrimary">@color/prime_theme_midnight_header</item>
+    </style>
+    <!-- Mahogany Copper -->
+    <style name="MyLeanbackTheme.PrimeMahogany" parent="Theme.Leanback">
+        <item name="android:windowBackground">@color/prime_theme_mahogany_background</item>
+        <item name="android:windowEnterTransition">@android:transition/fade</item>
+        <item name="android:windowExitTransition">@android:transition/fade</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="colorPrimary">@color/prime_theme_mahogany_primary</item>
+        <item name="colorPrimaryDark">@color/prime_theme_mahogany_gradient_start</item>
+        <item name="colorAccent">@color/prime_theme_mahogany_accent</item>
+        <item name="alertDialogTheme">@style/Theme.AlertDialog.Black</item>
+        <item name="detailsActionButtonStyle">@style/MyDetailsActionButtonStyle</item>
+    </style>
+    <style name="MyLeanbackTheme.Preferences.PrimeMahogany" parent="Theme.Leanback">
+        <item name="preferenceTheme">@style/MyLeanbackPreferenceTheme.PrimeMahogany</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="alertDialogTheme">@style/Theme.AlertDialog.Black</item>
+    </style>
+    <style name="MyLeanbackPreferenceTheme.PrimeMahogany" parent="PreferenceThemeOverlayLeanback">
+        <item name="android:windowBackground">@color/prime_theme_mahogany_background</item>
+        <item name="colorPrimary">@color/prime_theme_mahogany_header</item>
+        <item name="android:colorPrimary">@color/prime_theme_mahogany_header</item>
+    </style>
+    <!-- Imperial Purple -->
+    <style name="MyLeanbackTheme.PrimePurple" parent="Theme.Leanback">
+        <item name="android:windowBackground">@color/prime_theme_purple_background</item>
+        <item name="android:windowEnterTransition">@android:transition/fade</item>
+        <item name="android:windowExitTransition">@android:transition/fade</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="colorPrimary">@color/prime_theme_purple_primary</item>
+        <item name="colorPrimaryDark">@color/prime_theme_purple_gradient_start</item>
+        <item name="colorAccent">@color/prime_theme_purple_accent</item>
+        <item name="alertDialogTheme">@style/Theme.AlertDialog.Black</item>
+        <item name="detailsActionButtonStyle">@style/MyDetailsActionButtonStyle</item>
+    </style>
+    <style name="MyLeanbackTheme.Preferences.PrimePurple" parent="Theme.Leanback">
+        <item name="preferenceTheme">@style/MyLeanbackPreferenceTheme.PrimePurple</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="alertDialogTheme">@style/Theme.AlertDialog.Black</item>
+    </style>
+    <style name="MyLeanbackPreferenceTheme.PrimePurple" parent="PreferenceThemeOverlayLeanback">
+        <item name="android:windowBackground">@color/prime_theme_purple_background</item>
+        <item name="colorPrimary">@color/prime_theme_purple_header</item>
+        <item name="android:colorPrimary">@color/prime_theme_purple_header</item>
+    </style>
+</resources>

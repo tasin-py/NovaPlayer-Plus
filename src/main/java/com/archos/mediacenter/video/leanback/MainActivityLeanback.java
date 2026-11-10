@@ -112,8 +112,9 @@ public class MainActivityLeanback extends LeanbackActivity {
         
         // Apply correct theme before super.onCreate() to avoid visual flash
         ThemeManager themeManager = ThemeManager.getInstance(this);
-        if (themeManager.isBlackTheme()) {
-            setTheme(R.style.MyLeanbackTheme_Black);
+        int themeStyle = themeManager.getLeanbackThemeStyle(); // NovaPlayer Prime: Black and extra themes
+        if (themeStyle != 0) {
+            setTheme(themeStyle);
         }
         
         ((CustomApplication) getApplication()).loadLocale();

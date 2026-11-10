@@ -53,6 +53,14 @@
     <string name="prime_bookmarked_empty">No bookmarks yet</string>
     <string name="prime_bookmarked_empty_hint">In Network &gt; Stream, open a folder or a video and choose Bookmark.</string>
 
+    <!-- Extra themes (Preferences > Theme) -->
+    <string name="prime_theme_gold">Noir Gold</string>
+    <string name="prime_theme_burgundy">Royal Burgundy</string>
+    <string name="prime_theme_emerald">Emerald Velvet</string>
+    <string name="prime_theme_midnight">Midnight Silver</string>
+    <string name="prime_theme_mahogany">Mahogany Copper</string>
+    <string name="prime_theme_purple">Imperial Purple</string>
+
     <!-- Credits and support -->
     <string name="prime_credits_title">Nova Player Plus by tasin-py</string>
     <string name="prime_credits_summary">Based on NOVA Video Player by the NOVA developers (Courville Software and contributors), itself derived from Archos Video Player. Forked and customized by tasin-py · github.com/tasin-py</string>

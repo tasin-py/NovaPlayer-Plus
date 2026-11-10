@@ -25,8 +25,9 @@ public class VideoSettingsMoreLeanbackActivity extends LeanbackActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // Apply black theme variant for leanback preferences when in black theme
-        if (ThemeManager.getInstance(this).isBlackTheme()) {
-            setTheme(R.style.MyLeanbackTheme_Preferences_Black);
+        int themeStyle = ThemeManager.getInstance(this).getLeanbackPreferencesStyle(); // NovaPlayer Prime: Black and extra themes
+        if (themeStyle != 0) {
+            setTheme(themeStyle);
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_settings_more_leanback);

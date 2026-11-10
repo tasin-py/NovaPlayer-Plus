@@ -41,31 +41,63 @@ public class ThemeManager {
     
     public static final String THEME_BLUE = "blue";
     public static final String THEME_BLACK = "black";
+    // NovaPlayer Prime: extra themes. Order = index in every color array below.
+    private static final String[] THEMES = {THEME_BLUE, THEME_BLACK,
+            "gold", "burgundy", "emerald", "midnight", "mahogany", "purple"};
+    private static final int[] LEANBACK_STYLES = {0, R.style.MyLeanbackTheme_Black,
+            R.style.MyLeanbackTheme_PrimeGold, R.style.MyLeanbackTheme_PrimeBurgundy, R.style.MyLeanbackTheme_PrimeEmerald,
+            R.style.MyLeanbackTheme_PrimeMidnight, R.style.MyLeanbackTheme_PrimeMahogany, R.style.MyLeanbackTheme_PrimePurple};
+    private static final int[] LEANBACK_PREFERENCES_STYLES = {0, R.style.MyLeanbackTheme_Preferences_Black,
+            R.style.MyLeanbackTheme_Preferences_PrimeGold, R.style.MyLeanbackTheme_Preferences_PrimeBurgundy,
+            R.style.MyLeanbackTheme_Preferences_PrimeEmerald, R.style.MyLeanbackTheme_Preferences_PrimeMidnight,
+            R.style.MyLeanbackTheme_Preferences_PrimeMahogany, R.style.MyLeanbackTheme_Preferences_PrimePurple};
     
     private static ThemeManager sInstance;
     private SharedPreferences mPrefs;
     
     // Theme color resource IDs - resolved at runtime via getThemeColor()
-    private static final int[] GRID_ITEM_BACKGROUND = {R.color.theme_grid_item_blue, R.color.theme_grid_item_black};
-    private static final int[] LEANBACK_BACKGROUND = {R.color.theme_background_blue, R.color.theme_background_black};
-    private static final int[] LEANBACK_TRANSPARENT = {R.color.leanback_background_transparent, R.color.leanback_background_transparent};
-    private static final int[] LEANBACK_HEADER = {R.color.theme_header_blue, R.color.theme_header_black};
-    private static final int[] TOOLBAR_BACKGROUND = {R.color.theme_toolbar_blue, R.color.theme_toolbar_black};
-    private static final int[] DETAILS_PRIMARY = {R.color.theme_details_primary_blue, R.color.theme_details_primary_black};
-    private static final int[] DETAILS_SECONDARY = {R.color.theme_details_secondary_blue, R.color.theme_details_secondary_black};
-    private static final int[] CATEGORY_SELECTOR = {R.color.theme_category_selector_blue, R.color.theme_category_selector_black};
-    private static final int[] LIST_ITEM_PRESSED = {R.color.theme_list_pressed_blue, R.color.theme_list_pressed_black};
-    private static final int[] LIST_ITEM_FOCUSED = {R.color.theme_list_focused_blue, R.color.theme_list_focused_black};
-    private static final int[] GRADIENT_START = {R.color.theme_gradient_start_blue, R.color.theme_gradient_start_black};
-    private static final int[] GRADIENT_END = {R.color.theme_gradient_end_blue, R.color.theme_gradient_end_black};
-    private static final int[] RESCAN_COLOR = {R.color.theme_rescan_blue, R.color.theme_rescan_black};
-    private static final int[] SEARCH_AFFORDANCE = {R.color.theme_search_affordance_blue, R.color.theme_search_affordance_black};
+    private static final int[] GRID_ITEM_BACKGROUND = {R.color.theme_grid_item_blue, R.color.theme_grid_item_black, R.color.prime_theme_gold_grid_item, R.color.prime_theme_burgundy_grid_item, R.color.prime_theme_emerald_grid_item, R.color.prime_theme_midnight_grid_item, R.color.prime_theme_mahogany_grid_item, R.color.prime_theme_purple_grid_item /* NovaPlayer Prime */};
+    private static final int[] LEANBACK_BACKGROUND = {R.color.theme_background_blue, R.color.theme_background_black, R.color.prime_theme_gold_background, R.color.prime_theme_burgundy_background, R.color.prime_theme_emerald_background, R.color.prime_theme_midnight_background, R.color.prime_theme_mahogany_background, R.color.prime_theme_purple_background /* NovaPlayer Prime */};
+    private static final int[] LEANBACK_TRANSPARENT = {R.color.leanback_background_transparent, R.color.leanback_background_transparent, R.color.prime_theme_gold_transparent, R.color.prime_theme_burgundy_transparent, R.color.prime_theme_emerald_transparent, R.color.prime_theme_midnight_transparent, R.color.prime_theme_mahogany_transparent, R.color.prime_theme_purple_transparent /* NovaPlayer Prime */};
+    private static final int[] LEANBACK_HEADER = {R.color.theme_header_blue, R.color.theme_header_black, R.color.prime_theme_gold_header, R.color.prime_theme_burgundy_header, R.color.prime_theme_emerald_header, R.color.prime_theme_midnight_header, R.color.prime_theme_mahogany_header, R.color.prime_theme_purple_header /* NovaPlayer Prime */};
+    private static final int[] TOOLBAR_BACKGROUND = {R.color.theme_toolbar_blue, R.color.theme_toolbar_black, R.color.prime_theme_gold_toolbar, R.color.prime_theme_burgundy_toolbar, R.color.prime_theme_emerald_toolbar, R.color.prime_theme_midnight_toolbar, R.color.prime_theme_mahogany_toolbar, R.color.prime_theme_purple_toolbar /* NovaPlayer Prime */};
+    private static final int[] DETAILS_PRIMARY = {R.color.theme_details_primary_blue, R.color.theme_details_primary_black, R.color.prime_theme_gold_details_primary, R.color.prime_theme_burgundy_details_primary, R.color.prime_theme_emerald_details_primary, R.color.prime_theme_midnight_details_primary, R.color.prime_theme_mahogany_details_primary, R.color.prime_theme_purple_details_primary /* NovaPlayer Prime */};
+    private static final int[] DETAILS_SECONDARY = {R.color.theme_details_secondary_blue, R.color.theme_details_secondary_black, R.color.prime_theme_gold_details_secondary, R.color.prime_theme_burgundy_details_secondary, R.color.prime_theme_emerald_details_secondary, R.color.prime_theme_midnight_details_secondary, R.color.prime_theme_mahogany_details_secondary, R.color.prime_theme_purple_details_secondary /* NovaPlayer Prime */};
+    private static final int[] CATEGORY_SELECTOR = {R.color.theme_category_selector_blue, R.color.theme_category_selector_black, R.color.prime_theme_gold_category_selector, R.color.prime_theme_burgundy_category_selector, R.color.prime_theme_emerald_category_selector, R.color.prime_theme_midnight_category_selector, R.color.prime_theme_mahogany_category_selector, R.color.prime_theme_purple_category_selector /* NovaPlayer Prime */};
+    private static final int[] LIST_ITEM_PRESSED = {R.color.theme_list_pressed_blue, R.color.theme_list_pressed_black, R.color.prime_theme_gold_list_pressed, R.color.prime_theme_burgundy_list_pressed, R.color.prime_theme_emerald_list_pressed, R.color.prime_theme_midnight_list_pressed, R.color.prime_theme_mahogany_list_pressed, R.color.prime_theme_purple_list_pressed /* NovaPlayer Prime */};
+    private static final int[] LIST_ITEM_FOCUSED = {R.color.theme_list_focused_blue, R.color.theme_list_focused_black, R.color.prime_theme_gold_list_focused, R.color.prime_theme_burgundy_list_focused, R.color.prime_theme_emerald_list_focused, R.color.prime_theme_midnight_list_focused, R.color.prime_theme_mahogany_list_focused, R.color.prime_theme_purple_list_focused /* NovaPlayer Prime */};
+    private static final int[] GRADIENT_START = {R.color.theme_gradient_start_blue, R.color.theme_gradient_start_black, R.color.prime_theme_gold_gradient_start, R.color.prime_theme_burgundy_gradient_start, R.color.prime_theme_emerald_gradient_start, R.color.prime_theme_midnight_gradient_start, R.color.prime_theme_mahogany_gradient_start, R.color.prime_theme_purple_gradient_start /* NovaPlayer Prime */};
+    private static final int[] GRADIENT_END = {R.color.theme_gradient_end_blue, R.color.theme_gradient_end_black, R.color.prime_theme_gold_gradient_end, R.color.prime_theme_burgundy_gradient_end, R.color.prime_theme_emerald_gradient_end, R.color.prime_theme_midnight_gradient_end, R.color.prime_theme_mahogany_gradient_end, R.color.prime_theme_purple_gradient_end /* NovaPlayer Prime */};
+    private static final int[] RESCAN_COLOR = {R.color.theme_rescan_blue, R.color.theme_rescan_black, R.color.prime_theme_gold_rescan, R.color.prime_theme_burgundy_rescan, R.color.prime_theme_emerald_rescan, R.color.prime_theme_midnight_rescan, R.color.prime_theme_mahogany_rescan, R.color.prime_theme_purple_rescan /* NovaPlayer Prime */};
+    private static final int[] SEARCH_AFFORDANCE = {R.color.theme_search_affordance_blue, R.color.theme_search_affordance_black, R.color.prime_theme_gold_search_affordance, R.color.prime_theme_burgundy_search_affordance, R.color.prime_theme_emerald_search_affordance, R.color.prime_theme_midnight_search_affordance, R.color.prime_theme_mahogany_search_affordance, R.color.prime_theme_purple_search_affordance /* NovaPlayer Prime */};
     
+    // NovaPlayer Prime: accent and private-mode colors, same theme order as THEMES
+    private static final int[] ACCENT = {R.color.theme_accent_blue, R.color.theme_accent_black, R.color.prime_theme_gold_accent, R.color.prime_theme_burgundy_accent, R.color.prime_theme_emerald_accent, R.color.prime_theme_midnight_accent, R.color.prime_theme_mahogany_accent, R.color.prime_theme_purple_accent};
+    private static final int[] PRIVATE_MODE = {R.color.theme_private_mode_blue, R.color.theme_private_mode_black, R.color.prime_theme_gold_private_mode, R.color.prime_theme_burgundy_private_mode, R.color.prime_theme_emerald_private_mode, R.color.prime_theme_midnight_private_mode, R.color.prime_theme_mahogany_private_mode, R.color.prime_theme_purple_private_mode};
+
     private Context mContext;
     
     private int getThemeColor(int[] colorArray) {
-        int index = isBlackTheme() ? 1 : 0;
-        return ContextCompat.getColor(mContext, colorArray[index]);
+        return ContextCompat.getColor(mContext, colorArray[getThemeIndex()]);
+    }
+
+    /** NovaPlayer Prime: index of the current theme in THEMES and in every color array (unknown → blue). */
+    private int getThemeIndex() {
+        String theme = getCurrentTheme();
+        for (int i = 0; i < THEMES.length; i++) if (THEMES[i].equals(theme)) return i;
+        return 0;
+    }
+
+    /** NovaPlayer Prime: TV theme style for the current theme, or 0 to keep the default (blue) one. */
+    public int getLeanbackThemeStyle() {
+        int i = getThemeIndex();
+        return i == 0 ? 0 : LEANBACK_STYLES[i];
+    }
+
+    /** NovaPlayer Prime: TV settings style for the current theme, or 0 to keep the default (blue) one. */
+    public int getLeanbackPreferencesStyle() {
+        int i = getThemeIndex();
+        return i == 0 ? 0 : LEANBACK_PREFERENCES_STYLES[i];
     }
 
     private ThemeManager(Context context) {
@@ -196,7 +228,7 @@ public class ThemeManager {
      * Get accent color for progress bars and other accent UI elements
      */
     public int getAccentColor() {
-        return ContextCompat.getColor(mContext, isBlackTheme() ? R.color.theme_accent_black : R.color.theme_accent_blue);
+        return getThemeColor(ACCENT);
     }
 
     /**
@@ -205,7 +237,7 @@ public class ThemeManager {
      * Black theme: dark charcoal grey
      */
     public int getPrivateModeColor() {
-        return ContextCompat.getColor(mContext, isBlackTheme() ? R.color.theme_private_mode_black : R.color.theme_private_mode_blue);
+        return getThemeColor(PRIVATE_MODE);
     }
 
     /**
