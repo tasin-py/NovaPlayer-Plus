@@ -42,6 +42,9 @@ public class StreamBookmarksFragment extends GuidedStepSupportFragment {
 
     private final List<StreamBookmarks.Entry> mEntries = new ArrayList<>();
     private Overlay mOverlay;
+    /** When the list appeared: presses right after it are a remote's double press. */
+    private long mShownAt;
+    private static final long DOUBLE_PRESS_GUARD_MS = 700;
 
     @NonNull
     @Override
@@ -74,6 +77,7 @@ public class StreamBookmarksFragment extends GuidedStepSupportFragment {
     public void onResume() {
         super.onResume();
         if (mOverlay != null) mOverlay.resume();
+        mShownAt = android.os.SystemClock.uptimeMillis();
         // A bookmark may have been added or removed in a screen opened from here
         int selected = getSelectedActionPosition();
         List<GuidedAction> actions = new ArrayList<>();
@@ -118,6 +122,7 @@ public class StreamBookmarksFragment extends GuidedStepSupportFragment {
 
     @Override
     public void onGuidedActionClicked(GuidedAction action) {
+        if (android.os.SystemClock.uptimeMillis() - mShownAt < DOUBLE_PRESS_GUARD_MS) return; // remote double press
         int index = (int) (action.getId() - ID_BASE);
         if (index < 0 || index >= mEntries.size()) return;
         StreamBookmarks.Entry e = mEntries.get(index);

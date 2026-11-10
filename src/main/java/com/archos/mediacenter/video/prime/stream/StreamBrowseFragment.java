@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -92,6 +93,9 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
     private String mFileName;
     private String mError;
     private final List<FolderParser.Item> mItems = new ArrayList<>();
+    /** When the current list appeared: presses right after it are a remote's double press. */
+    private long mShownAt;
+    private static final long DOUBLE_PRESS_GUARD_MS = 700;
 
     /**
      * @param record add the link to "Recent streams" once it opens as a folder (videos are added when played)
@@ -143,6 +147,12 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
         buildActions(actions);
     }
 
+    /** Bookmark lives in the side button column (D-pad right), never as the first list item. */
+    @Override
+    public void onCreateButtonActions(@NonNull List<GuidedAction> actions, Bundle savedInstanceState) {
+        buildButtonActions(actions);
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -161,6 +171,7 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
     public void onResume() {
         super.onResume();
         if (mOverlay != null) mOverlay.resume();
+        mShownAt = SystemClock.uptimeMillis();
         // Bookmarks may have changed in a screen opened from here
         if (mMode == Mode.FOLDER || mMode == Mode.VIDEO) updateBookmarkAction();
     }
@@ -264,7 +275,6 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
                 actions.add(info(c, getString(R.string.prime_stream_loading), null));
                 break;
             case FOLDER:
-                actions.add(bookmarkAction(c, true));
                 if (mItems.isEmpty()) {
                     actions.add(info(c, getString(R.string.prime_stream_folder_empty), null));
                 }
@@ -285,7 +295,6 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
                         .id(ID_PLAY)
                         .title(getString(R.string.prime_stream_play))
                         .build());
-                actions.add(bookmarkAction(c, false));
                 break;
             case ERROR:
                 actions.add(info(c, mError, null));
@@ -301,6 +310,10 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
                 }
                 break;
         }
+    }
+
+    private void buildButtonActions(List<GuidedAction> actions) {
+        if (mMode == Mode.FOLDER || mMode == Mode.VIDEO) actions.add(bookmarkAction(requireContext(), mMode == Mode.FOLDER));
     }
 
     private GuidedAction bookmarkAction(Context c, boolean folder) {
@@ -330,6 +343,10 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
         List<GuidedAction> actions = new ArrayList<>();
         buildActions(actions);
         setActions(actions);
+        List<GuidedAction> buttons = new ArrayList<>();
+        buildButtonActions(buttons);
+        setButtonActions(buttons);
+        mShownAt = SystemClock.uptimeMillis();
         // Land on the first thing that can be clicked
         for (int i = 0; i < actions.size(); i++) {
             if (actions.get(i).isFocusable() && !actions.get(i).infoOnly()) {
@@ -340,17 +357,18 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
     }
 
     private void updateBookmarkAction() {
-        int pos = findActionPositionById(ID_BOOKMARK);
+        int pos = findButtonActionPositionById(ID_BOOKMARK);
         if (pos < 0) return;
         GuidedAction fresh = bookmarkAction(requireContext(), mMode == Mode.FOLDER);
-        GuidedAction a = getActions().get(pos);
+        GuidedAction a = getButtonActions().get(pos);
         a.setTitle(fresh.getTitle());
         a.setDescription(fresh.getDescription());
-        notifyActionChanged(pos);
+        notifyButtonActionChanged(pos);
     }
 
     @Override
     public void onGuidedActionClicked(GuidedAction action) {
+        if (SystemClock.uptimeMillis() - mShownAt < DOUBLE_PRESS_GUARD_MS) return; // remote double press
         long id = action.getId();
         Context c = requireContext();
         if (id == ID_BOOKMARK) {
