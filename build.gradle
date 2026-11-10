@@ -151,7 +151,7 @@ android {
         }
     }
     defaultConfig {
-        applicationId = "org.courville.nova"
+        applicationId = "com.tasinpy.novaplayerplus" // NovaPlayer Plus: own app ID (NOVA is org.courville.nova)
         generatedDensities = []
         minSdkVersion 23
         targetSdkVersion 36

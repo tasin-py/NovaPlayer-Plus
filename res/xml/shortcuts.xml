@@ -24,7 +24,7 @@
         >
         <intent
             android:action="com.archos.mediacenter.video.action_resume"
-            android:targetPackage="com.archos.mediacenter.videocommunity"
+            android:targetPackage="com.tasinpy.novaplayerplus"
             android:targetClass="com.archos.mediacenter.video.browser.MainActivity" />
     </shortcut>
     <shortcut
@@ -35,7 +35,7 @@
         >
         <intent
             android:action="com.archos.mediacenter.video.action_recently_played"
-            android:targetPackage="com.archos.mediacenter.videocommunity"
+            android:targetPackage="com.tasinpy.novaplayerplus"
             android:targetClass="com.archos.mediacenter.video.browser.MainActivity" />
     </shortcut>
     <shortcut
@@ -46,7 +46,7 @@
         >
         <intent
             android:action="com.archos.mediacenter.video.action_recently_added"
-            android:targetPackage="com.archos.mediacenter.videocommunity"
+            android:targetPackage="com.tasinpy.novaplayerplus"
             android:targetClass="com.archos.mediacenter.video.browser.MainActivity" />
     </shortcut>
 </shortcuts>
