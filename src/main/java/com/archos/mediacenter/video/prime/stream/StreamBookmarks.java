@@ -51,7 +51,7 @@ public final class StreamBookmarks {
         return context.getApplicationContext().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
     }
 
-    /** Sorted A to Z by name (ignoring case). */
+    /** Sorted A to Z by name, ignoring case, with numbers in number order (2 before 10). */
     public static synchronized List<Entry> load(Context context) {
         List<Entry> result = new ArrayList<>();
         try {
@@ -67,10 +67,40 @@ public final class StreamBookmarks {
             // unreadable: keep the stored text untouched rather than wiping bookmarks
         }
         Collections.sort(result, (a, b) -> {
-            int c = a.name.compareToIgnoreCase(b.name);
+            int c = compareNames(a.name, b.name);
             return c != 0 ? c : a.url.compareTo(b.url);
         });
         return result;
+    }
+
+    /** Case-insensitive compare where digit runs count as numbers: "Season 2" before "Season 10". */
+    static int compareNames(String a, String b) {
+        int i = 0, j = 0, na = a.length(), nb = b.length();
+        while (i < na && j < nb) {
+            char ca = a.charAt(i), cb = b.charAt(j);
+            if (Character.isDigit(ca) && Character.isDigit(cb)) {
+                int si = i, sj = j;
+                while (i < na && Character.isDigit(a.charAt(i))) i++;
+                while (j < nb && Character.isDigit(b.charAt(j))) j++;
+                // compare digit runs as numbers, without overflow: skip leading zeros, then length, then digits
+                int zi = si, zj = sj;
+                while (zi < i - 1 && a.charAt(zi) == '0') zi++;
+                while (zj < j - 1 && b.charAt(zj) == '0') zj++;
+                int len = (i - zi) - (j - zj);
+                if (len != 0) return len;
+                for (int k = 0; k < i - zi; k++) {
+                    int d = a.charAt(zi + k) - b.charAt(zj + k);
+                    if (d != 0) return d;
+                }
+            } else {
+                int d = Character.toLowerCase(Character.toUpperCase(ca)) - Character.toLowerCase(Character.toUpperCase(cb));
+                if (d != 0) return d;
+                i++;
+                j++;
+            }
+        }
+        int rest = (na - i) - (nb - j);
+        return rest != 0 ? rest : a.compareToIgnoreCase(b);
     }
 
     public static synchronized boolean contains(Context context, String url) {
