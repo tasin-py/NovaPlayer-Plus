@@ -20,38 +20,38 @@ choose from eight themes, and update in one click.</p>
 </p>
 
 <h3>
-<a href="https://github.com/tasin-py/NovaPlayer-Plus/releases/latest">⬇ Download</a>
-&nbsp;·&nbsp; <a href="#-features">Features</a>
-&nbsp;·&nbsp; <a href="#-themes">Themes</a>
-&nbsp;·&nbsp; <a href="#-install">Install</a>
-&nbsp;·&nbsp; <a href="#-faq">FAQ</a>
-&nbsp;·&nbsp; <a href="#-support">Support</a>
+<a href="https://github.com/tasin-py/NovaPlayer-Plus/releases/latest">⬇️ Download</a>
+&nbsp;·&nbsp; <a href="#features">Features</a>
+&nbsp;·&nbsp; <a href="#themes">Themes</a>
+&nbsp;·&nbsp; <a href="#install">Install</a>
+&nbsp;·&nbsp; <a href="#faq">FAQ</a>
+&nbsp;·&nbsp; <a href="#support">Support</a>
 </h3>
 
 </div>
 
 ---
 
-## ✨ Highlights
+## Highlights
 
 <table>
 <tr>
-<td align="center" width="25%"><h3>🔗</h3><b>Stream any link</b><br><sub>Paste it and play. Direct files, HLS, DASH, RTSP, Drive, Dropbox, OneDrive</sub></td>
-<td align="center" width="25%"><h3>📂</h3><b>Browse server folders</b><br><sub>Folder links open as a list you can explore</sub></td>
-<td align="center" width="25%"><h3>🔖</h3><b>Bookmarks</b><br><sub>Saved until you remove them, right on the home screen</sub></td>
-<td align="center" width="25%"><h3>🎨</h3><b>Eight themes</b><br><sub>Six premium themes plus the classic Blue and Black</sub></td>
+<td align="center" width="25%"><h3>1️⃣</h3><b>Stream any link</b><br><sub>Paste it and play. Direct files, HLS, DASH, RTSP, Drive, Dropbox, OneDrive</sub></td>
+<td align="center" width="25%"><h3>2️⃣</h3><b>Browse server folders</b><br><sub>Folder links open as a list you can explore</sub></td>
+<td align="center" width="25%"><h3>3️⃣</h3><b>Bookmarks</b><br><sub>Saved until you remove them, right on the home screen</sub></td>
+<td align="center" width="25%"><h3>4️⃣</h3><b>Eight themes</b><br><sub>Six premium themes plus the classic Blue and Black</sub></td>
 </tr>
 <tr>
-<td align="center"><h3>🎬</h3><b>Details first</b><br><sub>See title, size and server before anything plays</sub></td>
-<td align="center"><h3>⬆️</h3><b>One-click updates</b><br><sub>A red dot tells you, one press installs</sub></td>
-<td align="center"><h3>🏠</h3><b>Made for the couch</b><br><sub>Built for the TV remote, from home screen to settings</sub></td>
-<td align="center"><h3>🎞️</h3><b>All of NOVA inside</b><br><sub>Every NOVA feature, unchanged</sub></td>
+<td align="center"><h3>5️⃣</h3><b>Details first</b><br><sub>See title, size and server before anything plays</sub></td>
+<td align="center"><h3>6️⃣</h3><b>One-click updates</b><br><sub>A red dot tells you, one press installs</sub></td>
+<td align="center"><h3>7️⃣</h3><b>Made for the couch</b><br><sub>Built for the TV remote, from home screen to settings</sub></td>
+<td align="center"><h3>8️⃣</h3><b>All of NOVA inside</b><br><sub>Every NOVA feature, unchanged</sub></td>
 </tr>
 </table>
 
-## 🚀 Features
+## Features
 
-### 🔗 Stream
+### 1️⃣ Stream
 Open **Network › Stream**, then type or **Paste** a link and choose **Open**.
 
 - **Direct video files** (mkv, mp4, avi…) over http and https
@@ -59,33 +59,33 @@ Open **Network › Stream**, then type or **Paste** a link and choose **Open**.
 - **Cloud share links:** Google Drive, Dropbox and OneDrive links are turned into direct links automatically
 - **Recent streams** stay in a list for 30 days
 
-### 📂 Server folders
+### 2️⃣ Server folders
 Paste the link of a folder on a media server (h5ai, nginx, Apache and similar listings), and it opens as a browsable list:
 
 - Sub-folders first, then videos, each with its size
 - Open a sub-folder to keep exploring, the same way as on the website
 
-### 🎬 Details before playing
+### 3️⃣ Details before playing
 A video never starts by surprise. Its page shows the **title, file name, size and server** first, with **Play** and **Bookmark**.
 
-### 🔖 Bookmarks
+### 4️⃣ Bookmarks
 - **Bookmark this folder** sits at the top of every folder; **Bookmark this video** sits under Play
 - Bookmarks are kept until you remove them
 - Find them in two places: on the **Stream** screen, and in **Bookmarked** on the home screen
 
-### 🏠 Home screen
+### 5️⃣ Home screen
 - **Network & Files** is the 2nd row, right under *Recently added*
 - **Bookmarked** sits right next to *Network*, one click away
 
-### ⬆️ One-click updates
+### 6️⃣ One-click updates
 - Checks for a new version at most every 6 hours, or on demand with **Settings › Nova Player Plus › Check for updates**
 - A **red dot** on Settings means an update is ready; **Update now** downloads and installs it
 - Picks the right file for your device automatically and only downloads from GitHub over HTTPS
 
-### 🎞️ Everything from NOVA
+### 7️⃣ Everything from NOVA
 Nova Player Plus keeps every feature of NOVA Video Player, untouched: local and network playback (SMB, UPnP, FTP, SFTP, WebDAV and more), hardware decoding, subtitles, audio passthrough, resume where you left off, automatic movie and TV show info with posters, and much more.
 
-## 🎨 Themes
+## Themes
 
 Choose in **Preferences › Theme**. Each theme recolors the background, side menu, tiles, highlights, progress bars and settings.
 
@@ -103,7 +103,7 @@ Choose in **Preferences › Theme**. Each theme recolors the background, side me
 | **Imperial Purple** | Royal purple with gold |
 | Blue · Black | NOVA's original themes |
 
-## 📥 Install
+## Install
 
 1. Open the **[latest release](https://github.com/tasin-py/NovaPlayer-Plus/releases/latest)**.
 2. Download the file for your device:
@@ -119,16 +119,16 @@ Choose in **Preferences › Theme**. Each theme recolors the background, side me
 4. Done. Future updates come through **Check for updates**.
 
 ### Works on
-| ✅ Supported | ❌ Not supported |
+| Supported | Not supported |
 |---|---|
 | Android TV and Google TV (Android 6.0 or newer) | LG TVs (webOS) |
 | Chromecast with Google TV, Google TV Streamer | Samsung TVs (Tizen) |
 | Amazon Fire TV sticks and boxes (by sideloading) | Roku |
 | Android boxes, phones and tablets | Apple TV |
 
-> **Have an LG, Samsung or other non-Android TV?** Plug an Android streaming stick into an HDMI port, such as a Chromecast with Google TV, a Fire TV Stick or a Mi Box, and install Nova Player Plus on it.
+> ➡️ **Have an LG, Samsung or other non-Android TV?** Plug an Android streaming stick into an HDMI port, such as a Chromecast with Google TV, a Fire TV Stick or a Mi Box, and install Nova Player Plus on it.
 
-## ❓ FAQ
+## FAQ
 
 <details>
 <summary><b>I already have NOVA Video Player. Can I install both?</b></summary>
@@ -154,7 +154,7 @@ Make sure the link is complete, with nothing extra copied before or after it, an
 Nova Player Plus adds no tracking or ads. Its own features only contact GitHub (to check for updates) and the links you choose to open. NOVA's online features, like fetching movie posters and info, work exactly as they do in NOVA.
 </details>
 
-## 🛠 For developers
+## For developers
 
 <details>
 <summary><b>How the code is organised</b></summary>
@@ -194,7 +194,7 @@ git push https://github.com/tasin-py/NovaPlayer-Plus.git HEAD:prime-video
 When NOVA moves to a new branch (for example v6.7), update the revisions in `prime.xml` to match their newest manifest.
 </details>
 
-## 💛 Support
+## Support
 
 If Nova Player Plus makes your evenings better, you can support its development:
 
@@ -203,12 +203,12 @@ If Nova Player Plus makes your evenings better, you can support its development:
 <a href="https://www.supportkori.com/tasinpy"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-supportkori.com%2Ftasinpy-ffdd00?style=for-the-badge&logo=buymeacoffee&logoColor=black" alt="Buy me a coffee"></a>
 <a href="https://github.com/tasin-py"><img src="https://img.shields.io/badge/GitHub-tasin--py-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub tasin-py"></a>
 
-⭐ **Starring this repository** also helps other people find it.<br>
+**Starring this repository** also helps other people find it.<br>
 Found a bug or have an idea? [Open an issue](https://github.com/tasin-py/NovaPlayer-Plus/issues).
 
 </div>
 
-## 🙏 Credits
+## Credits
 
 Nova Player Plus is built on **NOVA Video Player**, the open-source video player by the NOVA developers (Courville Software and contributors), which grew out of the **Archos Video Player** Community Edition. All credit for the player, its media engine and every original feature goes to them.
 
@@ -224,5 +224,5 @@ Forked, designed and maintained by **[tasin-py](https://github.com/tasin-py)**.
 <div align="center">
 <br>
 <sub>Licensed under the <a href="https://github.com/tasin-py/NovaPlayer-Plus/blob/prime/LICENSE.txt">Apache License 2.0</a>, like NOVA.<br>
-Made with ❤️ by Tasin</sub>
+Made by Tasin</sub>
 </div>
