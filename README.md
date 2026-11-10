@@ -119,7 +119,7 @@ Choose in **Preferences › Theme**. Each theme recolors the background, side me
 4. Done. Future updates come through **Check for updates**.
 
 ### Works on
-| Supported | Not supported |
+| ✅ Supported | ❌ Not supported |
 |---|---|
 | Android TV and Google TV (Android 6.0 or newer) | LG TVs (webOS) |
 | Chromecast with Google TV, Google TV Streamer | Samsung TVs (Tizen) |
@@ -203,7 +203,7 @@ If Nova Player Plus makes your evenings better, you can support its development:
 <a href="https://www.supportkori.com/tasinpy"><img src="https://img.shields.io/badge/Buy%20me%20a%20coffee-supportkori.com%2Ftasinpy-ffdd00?style=for-the-badge&logo=buymeacoffee&logoColor=black" alt="Buy me a coffee"></a>
 <a href="https://github.com/tasin-py"><img src="https://img.shields.io/badge/GitHub-tasin--py-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub tasin-py"></a>
 
-**Starring this repository** also helps other people find it.<br>
+⭐ **Starring this repository** also helps other people find it.<br>
 Found a bug or have an idea? [Open an issue](https://github.com/tasin-py/NovaPlayer-Plus/issues).
 
 </div>
@@ -224,5 +224,5 @@ Forked, designed and maintained by **[tasin-py](https://github.com/tasin-py)**.
 <div align="center">
 <br>
 <sub>Licensed under the <a href="https://github.com/tasin-py/NovaPlayer-Plus/blob/prime/LICENSE.txt">Apache License 2.0</a>, like NOVA.<br>
-Made by Tasin</sub>
+Made with ❤️ by Tasin</sub>
 </div>
