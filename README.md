@@ -36,22 +36,25 @@ choose from eight themes, and update in one click.</p>
 
 <table>
 <tr>
-<td align="center" width="25%"><h3>1️⃣</h3><b>Stream any link</b><br><sub>Paste it and play. Direct files, HLS, DASH, RTSP, Drive, Dropbox, OneDrive</sub></td>
-<td align="center" width="25%"><h3>2️⃣</h3><b>Browse server folders</b><br><sub>Folder links open as a list you can explore</sub></td>
-<td align="center" width="25%"><h3>3️⃣</h3><b>Bookmarks</b><br><sub>Saved until you remove them, right on the home screen</sub></td>
-<td align="center" width="25%"><h3>4️⃣</h3><b>Eight themes</b><br><sub>Six premium themes plus the classic Blue and Black</sub></td>
+<td align="center" width="25%"><h3>1️⃣</h3><b>All of NOVA inside</b><br><sub>Every NOVA feature, unchanged</sub></td>
+<td align="center" width="25%"><h3>2️⃣</h3><b>Stream any link</b><br><sub>Paste it and play. Direct files, HLS, DASH, RTSP, Drive, Dropbox, OneDrive</sub></td>
+<td align="center" width="25%"><h3>3️⃣</h3><b>Browse server folders</b><br><sub>Folder links open as a list you can explore</sub></td>
+<td align="center" width="25%"><h3>4️⃣</h3><b>Bookmarks</b><br><sub>Saved until you remove them, right on the home screen</sub></td>
 </tr>
 <tr>
-<td align="center"><h3>5️⃣</h3><b>Details first</b><br><sub>See title, size and server before anything plays</sub></td>
-<td align="center"><h3>6️⃣</h3><b>One-click updates</b><br><sub>A red dot tells you, one press installs</sub></td>
-<td align="center"><h3>7️⃣</h3><b>Made for the couch</b><br><sub>Built for the TV remote, from home screen to settings</sub></td>
-<td align="center"><h3>8️⃣</h3><b>All of NOVA inside</b><br><sub>Every NOVA feature, unchanged</sub></td>
+<td align="center"><h3>5️⃣</h3><b>Eight themes</b><br><sub>Six premium themes plus the classic Blue and Black</sub></td>
+<td align="center"><h3>6️⃣</h3><b>Details first</b><br><sub>See title, size and server before anything plays</sub></td>
+<td align="center"><h3>7️⃣</h3><b>One-click updates</b><br><sub>A red dot tells you, one press installs</sub></td>
+<td align="center"><h3>8️⃣</h3><b>Made for the couch</b><br><sub>Built for the TV remote, from home screen to settings</sub></td>
 </tr>
 </table>
 
 ## Features
 
-### 1️⃣ Stream
+### 1️⃣ Everything from NOVA
+Nova Player Plus keeps every feature of NOVA Video Player, untouched: local and network playback (SMB, UPnP, FTP, SFTP, WebDAV and more), hardware decoding, subtitles, audio passthrough, resume where you left off, automatic movie and TV show info with posters, and much more.
+
+### 2️⃣ Stream
 Open **Network › Stream**, then type or **Paste** a link and choose **Open**.
 
 - **Direct video files** (mkv, mp4, avi…) over http and https
@@ -59,31 +62,28 @@ Open **Network › Stream**, then type or **Paste** a link and choose **Open**.
 - **Cloud share links:** Google Drive, Dropbox and OneDrive links are turned into direct links automatically
 - **Recent streams** stay in a list for 30 days
 
-### 2️⃣ Server folders
+### 3️⃣ Server folders
 Paste the link of a folder on a media server (h5ai, nginx, Apache and similar listings), and it opens as a browsable list:
 
 - Sub-folders first, then videos, each with its size
 - Open a sub-folder to keep exploring, the same way as on the website
 
-### 3️⃣ Details before playing
+### 4️⃣ Details before playing
 A video never starts by surprise. Its page shows the **title, file name, size and server** first, with **Play** and **Bookmark**.
 
-### 4️⃣ Bookmarks
+### 5️⃣ Bookmarks
 - **Bookmark this folder** sits at the top of every folder; **Bookmark this video** sits under Play
 - Bookmarks are kept until you remove them
 - Find them in two places: on the **Stream** screen, and in **Bookmarked** on the home screen
 
-### 5️⃣ Home screen
+### 6️⃣ Home screen
 - **Network & Files** is the 2nd row, right under *Recently added*
 - **Bookmarked** sits right next to *Network*, one click away
 
-### 6️⃣ One-click updates
+### 7️⃣ One-click updates
 - Checks for a new version at most every 6 hours, or on demand with **Settings › Nova Player Plus › Check for updates**
 - A **red dot** on Settings means an update is ready; **Update now** downloads and installs it
 - Picks the right file for your device automatically and only downloads from GitHub over HTTPS
-
-### 7️⃣ Everything from NOVA
-Nova Player Plus keeps every feature of NOVA Video Player, untouched: local and network playback (SMB, UPnP, FTP, SFTP, WebDAV and more), hardware decoding, subtitles, audio passthrough, resume where you left off, automatic movie and TV show info with posters, and much more.
 
 ## Themes
 
@@ -128,12 +128,23 @@ Choose in **Preferences › Theme**. Each theme recolors the background, side me
 
 > ➡️ **Have an LG, Samsung or other non-Android TV?** Plug an Android streaming stick into an HDMI port, such as a Chromecast with Google TV, a Fire TV Stick or a Mi Box, and install Nova Player Plus on it.
 
+## Why does Nova Player Plus replace NOVA Video Player?
+
+**Nova Player Plus is a separate, independent project.** It's made by tasin-py, built on NOVA's open-source code. It isn't an official NOVA release, and the NOVA developers don't run or support it.
+
+**It replaces NOVA on your device** for one technical reason. Nova Player Plus still uses NOVA's app ID (`org.courville.nova`) and the names of NOVA's media library inside Android. Android allows only one app with those names, so the two can't be installed side by side: you use one or the other.
+
+**What that means for you:**
+- Uninstall NOVA before installing Nova Player Plus. Android refuses to install it over NOVA, because the two are signed by different developers.
+- Your NOVA library, watch history and settings don't carry over. Nova Player Plus rescans your videos and starts fresh.
+- To go back to NOVA, uninstall Nova Player Plus and install NOVA from its usual store.
+
 ## FAQ
 
 <details>
 <summary><b>I already have NOVA Video Player. Can I install both?</b></summary>
 <br>
-No. Nova Player Plus replaces NOVA, because both use the same app ID. Uninstall NOVA first, then install Nova Player Plus. Your NOVA library and settings won't carry over.
+No, not at the same time. Uninstall NOVA first, then install Nova Player Plus. See <a href="#why-does-nova-player-plus-replace-nova-video-player">why it replaces NOVA</a>.
 </details>
 
 <details>
