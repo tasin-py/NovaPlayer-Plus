@@ -1,5 +1,6 @@
-# NovaPlayer Prime: build signed APKs and publish them as a GitHub Release.
-# The in-app updater reads the latest release; its tag must be "prime-<versionCode>".
+# Nova Player Plus: build signed APKs and publish them as a GitHub Release.
+# The in-app updater reads the latest release; its tag must be "plus-<versionCode>"
+# (early releases used "prime-<versionCode>") and it downloads "NovaPlayerPlus-<abi>.apk".
 #
 # Required repository secrets (Settings > Secrets and variables > Actions):
 #   PRIME_KEYSTORE_BASE64    base64 of the release keystore (.jks)
@@ -7,7 +8,7 @@
 #   PRIME_KEY_ALIAS          key alias
 #   PRIME_KEY_PASSWORD       key password
 # Use the SAME keystore forever: Android refuses updates signed with a different key.
-name: NovaPlayer Prime release
+name: Nova Player Plus release
 
 on:
   push:
@@ -69,11 +70,11 @@ jobs:
       # NOVA's versionCode only changes every 1000 seconds (see getDate() in Video/build.gradle).
       # Two builds inside the same window would share one release tag, and the updater
       # could then download the older APK. Wait until this build gets a code above every
-      # existing prime-* release (same formula as build.gradle; Gradle runs later, so >=).
+      # existing plus-* or early prime-* release (same formula as build.gradle; Gradle runs later, so >=).
       env:
         REPO_GIT: https://github.com/${{ github.repository }}
       run: |
-        latest=$(git ls-remote --tags "$REPO_GIT" 'prime-*' | sed -nE 's#.*refs/tags/prime-([0-9]+)$#\1#p' | sort -n | tail -1)
+        latest=$(git ls-remote --tags "$REPO_GIT" 'plus-*' 'prime-*' | sed -nE 's#.*refs/tags/(plus|prime)-([0-9]+)$#\2#p' | sort -n | tail -1)
         latest=${latest:-0}
         code() { echo $(( 2549909 + ( $(date +%s) - 1472637600 - 108380000 - 88364898 ) / 1000 )); }
         echo "latest release code: $latest, current code: $(code)"
@@ -111,17 +112,17 @@ jobs:
       run: |
         mkdir -p out
         find nova/Video/build/outputs/apk -name '*-release.apk' -exec cp {} out/ \;
-        # Also attach "prime-<abi>.apk": the in-app updater downloads these fixed names
-        # through github.com links, so it never needs the rate-limited GitHub API.
-        for f in out/*-release.apk; do
-          abi=$(basename "$f" | sed -nE 's/.*-(arm64-v8a|armeabi-v7a|x86_64|x86|universal)-release\.apk$/\1/p')
-          if [ -n "$abi" ]; then cp "$f" "out/prime-$abi.apk"; fi
-        done
-        ls -l out
         first=$(ls out/*-release.apk | head -1)
-        # file names look like org.courville.nova-<versionCode>-<versionName>-<abi>-release.apk
+        # Gradle names them <appId>-<versionCode>-<versionName>-<abi>-release.apk
         code=$(basename "$first" | sed -E 's/^[^-]+-([0-9]+)-.*/\1/')
         vname=$(basename "$first" | sed -E 's/^[^-]+-[0-9]+-([0-9.]+-[0-9.]+)-.*/\1/')
+        # Publish only "NovaPlayerPlus-<abi>.apk": one clear file per device type. The in-app
+        # updater downloads these fixed names through github.com links (no rate-limited API).
+        for f in out/*-release.apk; do
+          abi=$(basename "$f" | sed -nE 's/.*-(arm64-v8a|armeabi-v7a|x86_64|x86|universal)-release\.apk$/\1/p')
+          if [ -n "$abi" ]; then mv "$f" "out/NovaPlayerPlus-$abi.apk"; else rm -f "$f"; fi
+        done
+        ls -l out
         echo "code=$code" >> "$GITHUB_OUTPUT"
         echo "name=$vname" >> "$GITHUB_OUTPUT"
         rm -f nova/Video/prime-release.jks nova/Video/keystore.properties
@@ -129,13 +130,14 @@ jobs:
     - name: publish release
       uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
       with:
-        tag_name: prime-${{ steps.apks.outputs.code }}
+        tag_name: plus-${{ steps.apks.outputs.code }}
         name: Nova Player Plus ${{ steps.apks.outputs.name }}
         target_commitish: ${{ github.sha }}
         make_latest: true
         body: |
           Nova Player Plus ${{ steps.apks.outputs.name }} (build ${{ steps.apks.outputs.code }}).
           Based on NOVA Video Player by the NOVA developers; forked and customized by tasin-py.
-          Install the APK matching your device: most Android TVs use armeabi-v7a or arm64-v8a.
+          Download the file for your device: most Android TVs use NovaPlayerPlus-armeabi-v7a.apk;
+          newer TVs, Google TV, phones and tablets can use NovaPlayerPlus-arm64-v8a.apk.
           Already installed? Settings > Nova Player Plus > Check for updates.
-        files: out/*.apk
+        files: out/NovaPlayerPlus-*.apk
