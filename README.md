@@ -5,7 +5,8 @@
 <h1>Nova Player Plus</h1>
 
 <p><b>A premium video player for Android TV.</b><br>
-Stream any link, browse server folders, bookmark what you watch,<br>
+Stream any link, browse and search server folders, bookmark what you watch,<br>
+pick up where you stopped, sync subtitles automatically,<br>
 choose from eight themes, and update in one click.</p>
 
 <p>
@@ -38,7 +39,7 @@ choose from eight themes, and update in one click.</p>
 <tr>
 <td align="center" width="25%"><h3>1️⃣</h3><b>All of NOVA inside</b><br><sub>Every NOVA feature, unchanged</sub></td>
 <td align="center" width="25%"><h3>2️⃣</h3><b>Stream any link</b><br><sub>Paste it and play. Direct files, HLS, DASH, RTSP, Drive, Dropbox, OneDrive</sub></td>
-<td align="center" width="25%"><h3>3️⃣</h3><b>Browse server folders</b><br><sub>Folder links open as a list you can explore</sub></td>
+<td align="center" width="25%"><h3>3️⃣</h3><b>Browse server folders</b><br><sub>Folder links open as a list you can explore and search</sub></td>
 <td align="center" width="25%"><h3>4️⃣</h3><b>Bookmarks</b><br><sub>Saved until you remove them, right on the home screen</sub></td>
 </tr>
 <tr>
@@ -46,6 +47,10 @@ choose from eight themes, and update in one click.</p>
 <td align="center"><h3>6️⃣</h3><b>Details first</b><br><sub>See title, size and server before anything plays</sub></td>
 <td align="center"><h3>7️⃣</h3><b>One-click updates</b><br><sub>A red dot tells you, one press installs</sub></td>
 <td align="center"><h3>8️⃣</h3><b>Made for the couch</b><br><sub>Built for the TV remote, from home screen to settings</sub></td>
+</tr>
+<tr>
+<td align="center" colspan="2"><h3>9️⃣</h3><b>Continue watching</b><br><sub>Remembers how far you got in every streamed video and shows it first on the home screen</sub></td>
+<td align="center" colspan="2"><h3>🔟</h3><b>Subtitles and sound in sync</b><br><sub>Sync subtitles automatically to the dialogue, and fix audio that drifts after a network hiccup</sub></td>
 </tr>
 </table>
 
@@ -67,20 +72,38 @@ Paste the link of a folder on a media server (h5ai, nginx, Apache and similar li
 
 - Sub-folders first, then videos, each with its size
 - Open a sub-folder to keep exploring, the same way as on the website
+- **Search in this folder** finds videos by name: type a few words in any order, like `friends s02`. **Show everything** brings the full list back
+- Videos you have started show how much you watched
 
 ### 4️⃣ Details before playing
 A video never starts by surprise. Its page shows the **title, file name, size and server** first, with **Play** and **Bookmark**.
+If you watched part of it before, you get **Resume from 23:10** and **Play from the start** instead of Play.
 
 ### 5️⃣ Bookmarks
-- **Bookmark this folder** sits at the top of every folder; **Bookmark this video** sits under Play
+- **Bookmark this folder** is the last item in every folder; **Bookmark this video** sits under Play
 - Bookmarks are kept until you remove them
+- Sorted A to Z, with numbers in natural order: *Season 2* comes before *Season 10*
+- **Search bookmarks** finds one by name when the list gets long
 - Find them in two places: on the **Stream** screen, and in **Bookmarked** on the home screen
 
-### 6️⃣ Home screen
+### 6️⃣ Continue watching
+Stop a streamed video part way and Nova Player Plus remembers where you were.
+
+- It appears at the **front of the Recently added row** on the home screen, with "Watched 23:10 of 45:00" and a progress bar. Press it to carry on from that point
+- The **Stream** screen also lists it under **Continue watching**
+- **Hold OK** on a home screen card to **Resume** or **Remove from Recently added**. Removing only takes it off the home screen; it comes back if you watch that video again
+- Videos you finish (or barely started) are left out, and old ones are forgotten after 30 days
+
+### 7️⃣ Home screen
+- **Continue watching** cards come first in *Recently added*
 - **Network & Files** is the 2nd row, right under *Recently added*
 - **Bookmarked** sits right next to *Network*, one click away
 
-### 7️⃣ One-click updates
+### 8️⃣ Player extras
+- **Sync subtitles automatically** (player menu › **Subtitles**): listens to the dialogue in a few short stretches of the movie and lines the subtitles up with it, usually in under a minute. It also spots subtitles made for a different frame rate, which drift further out over the film, and corrects those too. It sets NOVA's normal subtitle delay, so you can still fine-tune it by hand, and changes nothing if it isn't sure of the match. Works with subtitle files (.srt, .ass, .vtt), including ones from *Get subtitles online*
+- **Fix audio sync** (player menu › **Audio**): if the sound drifts out of step after a network hiccup or a seek, one press reopens the video at the same spot and puts it back in sync
+
+### 9️⃣ One-click updates
 - Checks for a new version at most every 6 hours, or on demand with **Settings › Nova Player Plus › Check for updates**
 - A **red dot** on Settings means an update is ready; **Update now** downloads and installs it
 - Picks the right file for your device automatically and only downloads from GitHub over HTTPS
@@ -155,6 +178,12 @@ Go to <b>Settings › Nova Player Plus › Check for updates</b>. When an update
 </details>
 
 <details>
+<summary><b>Sync subtitles automatically says it couldn't match. Why?</b></summary>
+<br>
+Usually the subtitles were made for a different cut of the film, so no single delay fits; try another subtitle file. It only works with subtitle files, not subtitles built into the video. If the movie's only sound track is in a format your TV can't decode (often DTS), it can't listen to the dialogue and will tell you so.
+</details>
+
+<details>
 <summary><b>A link won't play. What can I do?</b></summary>
 <br>
 Make sure the link is complete, with nothing extra copied before or after it, and that it points to a video or a folder, not a web page. If the server is slow or busy, try again later. If the details page can't read the file, choose <b>Try to play it anyway</b>.
@@ -163,7 +192,7 @@ Make sure the link is complete, with nothing extra copied before or after it, an
 <details>
 <summary><b>Does it collect any data?</b></summary>
 <br>
-Nova Player Plus adds no tracking or ads. Its own features only contact GitHub (to check for updates) and the links you choose to open. NOVA's online features, like fetching movie posters and info, work exactly as they do in NOVA.
+Nova Player Plus adds no tracking or ads. Its own features only contact GitHub (to check for updates) and the links you choose to open. Automatic subtitle sync runs entirely on your device. NOVA's online features, like fetching movie posters and info, work exactly as they do in NOVA.
 </details>
 
 ## For developers
