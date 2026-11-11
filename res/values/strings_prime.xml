@@ -97,4 +97,6 @@
     <string name="prime_stream_search_showing">Showing results for \"%1$s\"</string>
     <string name="prime_stream_search_clear">Show everything</string>
     <string name="prime_stream_search_none">Nothing matches \"%1$s\"</string>
+    <string name="prime_fix_audio_sync">Fix audio sync</string>
+    <string name="prime_fix_audio_sync_running">Putting sound and picture back in step…</string>
 </resources>

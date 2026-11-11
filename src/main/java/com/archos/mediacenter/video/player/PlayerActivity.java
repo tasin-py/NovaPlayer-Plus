@@ -2139,6 +2139,17 @@ public class PlayerActivity extends AppCompatActivity implements PlayerControlle
                     }
                 });
 
+                // Nova Player Plus: after a network stall or a seek the sound can drift; reopening at
+                // the same spot (what closing and resuming does) brings it back in step.
+                final TVMenuItem tvmiResync = mAudioTracksTVMenu.createAndAddTVMenuItem(getText(R.string.prime_fix_audio_sync).toString(), false, false);
+                tvmiResync.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPlayerController.showTVMenu(false);
+                        resyncAudioVideo();
+                    }
+                });
+
                 // disable playback speed if audio speed is disabled (passthrough, MediaCodec audio decoder, or API < 23)
                 if (VideoPreferencesCommon.isAudioSpeedEnabled(mPreferences)) {
                     final TVMenuItem tvmi4 = mAudioTracksTVMenu.createAndAddTVMenuItem(getText(R.string.player_pref_audio_speed_title).toString(), false, false);
@@ -3725,6 +3736,25 @@ public class PlayerActivity extends AppCompatActivity implements PlayerControlle
             mExtraMap.put("extra_name", clingName);
         }
 
+    }
+
+    /**
+     * Reopens the current video at the current position, like closing the player and resuming,
+     * but without leaving it. Resets the audio/video timing after drift. Uses NOVA's own
+     * reopen path (the one it uses to recover from a network read error).
+     */
+    private void resyncAudioVideo() {
+        PlayerService service = PlayerService.sPlayerService;
+        if (service == null || mPlayer == null || !mPlayer.isInPlaybackState() || mVideoInfo == null) return;
+        if (mPlayer.isBusy()) return; // still seeking: try again in a moment
+        int position = service.prepareRetryFromCurrentPosition();
+        if (position <= 0) return;
+        log.info("resyncAudioVideo: reopening at {} ms", position);
+        Toast.makeText(this, R.string.prime_fix_audio_sync_running, Toast.LENGTH_SHORT).show();
+        stop();
+        mResumeFromLast = true;
+        start();
+        service.retryPlayback();
     }
 
     private void stop() {
