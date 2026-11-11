@@ -72,6 +72,19 @@ public class StreamProgressTest {
     }
 
     @Test
+    public void hidingFromHomeKeepsResumeUntilWatchedAgain() {
+        StreamProgress.start(c, "u1", "A", "p1");
+        StreamProgress.record(c, "p1", 60_000, 0);
+        StreamProgress.hideFromHome(c, "u1");
+        assertTrue(StreamProgress.forHome(c).isEmpty());
+        assertEquals(1, StreamProgress.resumable(c).size()); // still on the Stream screen
+        assertEquals(60_000, StreamProgress.find(c, "u1").position);
+        StreamProgress.start(c, "u1", null, "p1");
+        StreamProgress.record(c, "p1", 70_000, 0);
+        assertEquals(1, StreamProgress.forHome(c).size()); // watched again: back on the home screen
+    }
+
+    @Test
     public void timesAreFormatted() {
         assertEquals("4:07", StreamProgress.formatTime(247_000));
         assertEquals("1:05:09", StreamProgress.formatTime(3_909_000));

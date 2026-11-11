@@ -1349,6 +1349,7 @@ public class PlayerActivity extends AppCompatActivity implements PlayerControlle
 
     @Override
     protected void onDestroy() {
+        com.archos.mediacenter.video.prime.subsync.SubSync.cancelRunning(); // Nova Player Plus
         if (log.isDebugEnabled()) log.debug("onDestroy");
 
         // System-driven destruction after Home/screensaver is not an external-player exit.
@@ -2049,6 +2050,15 @@ public class PlayerActivity extends AppCompatActivity implements PlayerControlle
 
                 if (log.isDebugEnabled()) log.debug("refreshSubtitleTVMenu: isCurrentSubtrackNone={}", isCurrentSubtrackNone());
                 disableSubtitleDelayTVMenuItem(isCurrentSubtrackNone());
+
+                // Nova Player Plus: never disabled, it explains when it cannot work
+                mSubtitleTVMenu.createAndAddTVMenuItem(getText(R.string.prime_subsync).toString(), false, false).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPlayerController.showTVMenu(false);
+                        startAutoSubtitleSync();
+                    }
+                });
 
                 // Never disabled: the panel explains when settings cannot apply (no track, image or unsupported format).
                 mSubtitleTVMenu.createAndAddTVMenuItem(getText(R.string.menu_player_settings).toString(), false, false).setOnClickListener(new View.OnClickListener() {
@@ -4222,6 +4232,69 @@ public class PlayerActivity extends AppCompatActivity implements PlayerControlle
         // Always hand over the user's value: for bitmap tracks the manager applies offset 0 by
         // itself and keeps the saved value intact (the old code passed 0 and lost it).
         mSubtitleManager.setVerticalPosition(vpos);
+    }
+
+    /**
+     * Nova Player Plus: finds the subtitle delay (and frame-rate fix) from the dialogue, then
+     * applies it through NOVA's own subtitle delay setting, which stays adjustable by hand.
+     */
+    private void startAutoSubtitleSync() {
+        if (com.archos.mediacenter.video.prime.subsync.SubSync.isRunning()) {
+            mPlayerController.updateToast(getText(R.string.prime_subsync_busy));
+            return;
+        }
+        SubtitleTrack track = currentSubtitleTrack();
+        if (track == null || isCurrentSubtrackNone()) {
+            mPlayerController.updateToast(getText(R.string.prime_subsync_choose));
+            return;
+        }
+        if (!track.isExternal || track.path == null || track.path.isEmpty()
+                || SubtitleManager.isGraphic(SubtitleManager.kindFromNative(track.kind))) {
+            mPlayerController.updateToast(getText(R.string.prime_subsync_not_file));
+            return;
+        }
+        Uri media = mStreamingUri != null ? mStreamingUri : mUri;
+        if (media == null || mPlayer == null) return;
+        final int previousDelay = mVideoInfo.subtitleDelay;
+        final int previousRatio = mVideoInfo.subtitleRatio;
+        mPlayerController.updateToast(getText(R.string.prime_subsync_listening));
+        com.archos.mediacenter.video.prime.subsync.SubSync.start(this, media, track.path, mPlayer.getDuration(),
+                new com.archos.mediacenter.video.prime.subsync.SubSync.Listener() {
+                    @Override
+                    public void onProgress(int done, int total) {
+                        if (isFinishing() || done >= total) return;
+                        mPlayerController.updateToast(getString(R.string.prime_subsync_progress, done, total));
+                    }
+
+                    @Override
+                    public void onSynced(int delayMs, int ratioIndex) {
+                        if (isFinishing() || mVideoInfo == null) return;
+                        if (ratioIndex == previousRatio && Math.abs(delayMs - previousDelay) < 150) {
+                            mPlayerController.updateToast(getText(R.string.prime_subsync_already));
+                            return;
+                        }
+                        onDelayChange(null, delayMs, ratioIndex);
+                        String amount = String.format(java.util.Locale.getDefault(), "%.1f", Math.abs(delayMs) / 1000f);
+                        String msg = delayMs >= 0 ? getString(R.string.prime_subsync_later, amount)
+                                : getString(R.string.prime_subsync_earlier, amount);
+                        if (ratioIndex != 0) msg += " " + getString(R.string.prime_subsync_fps);
+                        mPlayerController.updateToast(msg);
+                    }
+
+                    @Override
+                    public void onFailed(com.archos.mediacenter.video.prime.subsync.SubSync.Failure why) {
+                        if (isFinishing()) return;
+                        int text;
+                        switch (why) {
+                            case NOT_A_FILE: text = R.string.prime_subsync_not_file; break;
+                            case UNREADABLE: text = R.string.prime_subsync_unreadable; break;
+                            case NO_DECODER: text = R.string.prime_subsync_no_decoder; break;
+                            case NO_SOUND: text = R.string.prime_subsync_no_sound; break;
+                            default: text = R.string.prime_subsync_no_match; break;
+                        }
+                        Toast.makeText(PlayerActivity.this, text, Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     private void disableSubtitleDelayTVMenuItem(boolean disable) {

@@ -190,6 +190,10 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
     private CursorObjectAdapter mTvshowsAdapter;
     private CursorObjectAdapter mWatchingUpNextAdapter;
     private CursorObjectAdapter mLastAddedAdapter;
+    /** Nova Player Plus: streamed videos you stopped part way, shown first in the Recently added row. */
+    private ArrayObjectAdapter mPrimeContinueAdapter;
+    private PrimeJoinedAdapter mLastAddedJoined;
+    private static final int PRIME_MAX_CONTINUE = 10;
     private CursorObjectAdapter mLastPlayedAdapter;
     private ArrayObjectAdapter mFileBrowsingRowAdapter;
     private ArrayObjectAdapter mPreferencesRowAdapter;
@@ -433,6 +437,7 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
         if (mActivity == null) log.warn("onResume: mActivity is null!");
         mOverlay.resume();
         updateBackground();
+        primeRefreshContinue();
 
         // NovaPlayer Prime: background update check (at most every 6 hours) + badge refresh
         com.archos.mediacenter.video.prime.update.PrimeUpdater primeUpdater =
@@ -539,7 +544,7 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
             // Update last added row title
             if (mShowLastAddedRow) {
                 int lastAddedPosition = getRowPosition(ROW_ID_LAST_ADDED);
-                mLastAddedRow = new ListRow(ROW_ID_LAST_ADDED, new HeaderItem(lastAddedTitle), mLastAddedAdapter);
+                mLastAddedRow = new ListRow(ROW_ID_LAST_ADDED, new HeaderItem(lastAddedTitle), mLastAddedJoined);
                 if (lastAddedPosition != -1) {
                     replaceRow(lastAddedPosition, mLastAddedRow);
                 }
@@ -774,8 +779,12 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
 
         mLastAddedAdapter = new CursorObjectAdapter(new PosterImageCardPresenter(mActivity));
         mLastAddedAdapter.setMapper(new CompatibleCursorMapperConverter(new VideoCursorMapper()));
+        mPrimeContinueAdapter = new ArrayObjectAdapter(
+                new com.archos.mediacenter.video.leanback.presenter.PrimeContinuePresenter(this::primeAskRemoveContinue));
+        mLastAddedJoined = new PrimeJoinedAdapter(mPrimeContinueAdapter, mLastAddedAdapter);
+        primeLoadContinue();
         String lastAddedTitle = LoaderUtils.isSmartRecentlyRows() ? getString(R.string.new_and_unwatched) : getString(R.string.recently_added);
-        mLastAddedRow = new ListRow(ROW_ID_LAST_ADDED, new HeaderItem(lastAddedTitle), mLastAddedAdapter);
+        mLastAddedRow = new ListRow(ROW_ID_LAST_ADDED, new HeaderItem(lastAddedTitle), mLastAddedJoined);
 
         mLastPlayedAdapter = new CursorObjectAdapter(new PosterImageCardPresenter(mActivity));
         mLastPlayedAdapter.setMapper(new CompatibleCursorMapperConverter(new VideoCursorMapper()));
@@ -1114,7 +1123,8 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
         if (cursor != null) mLastAddedAdapter.changeCursor(cursor);
         else cursor = mLastAddedAdapter.getCursor();
         int currentPosition = getRowPosition(ROW_ID_LAST_ADDED);
-        if (cursor == null || cursor.getCount() == 0 || !mShowLastAddedRow) {
+        int primeContinue = mPrimeContinueAdapter != null ? mPrimeContinueAdapter.size() : 0;
+        if (((cursor == null || cursor.getCount() == 0) && primeContinue == 0) || !mShowLastAddedRow) {
             if (cursor == null) if (log.isDebugEnabled()) log.debug("updateLastAddedRow: cursor is null");
             else if (log.isDebugEnabled()) log.debug("updateLastAddedRow: cursor has {} elements", cursor.getCount());
             if (currentPosition != -1) {
@@ -1129,6 +1139,64 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
             }
         }
         debugRows("updateLastAddedRow");
+    }
+
+    // ---------------------------------------------------------------- Nova Player Plus: Continue watching
+
+    /** Fills the Continue watching cards (streamed videos stopped part way, newest first). */
+    private boolean primeLoadContinue() {
+        if (mPrimeContinueAdapter == null) return false;
+        Context c = mActivity != null ? mActivity : getContext();
+        if (c == null) return false;
+        java.util.List<com.archos.mediacenter.video.prime.stream.StreamProgress.Entry> entries =
+                com.archos.mediacenter.video.prime.stream.StreamProgress.forHome(c);
+        if (entries.size() > PRIME_MAX_CONTINUE) entries = entries.subList(0, PRIME_MAX_CONTINUE);
+        boolean same = entries.size() == mPrimeContinueAdapter.size();
+        for (int i = 0; same && i < entries.size(); i++) {
+            com.archos.mediacenter.video.prime.stream.StreamProgress.Entry old =
+                    (com.archos.mediacenter.video.prime.stream.StreamProgress.Entry) mPrimeContinueAdapter.get(i);
+            com.archos.mediacenter.video.prime.stream.StreamProgress.Entry now = entries.get(i);
+            same = old.url.equals(now.url) && old.position == now.position && old.duration == now.duration
+                    && old.name.equals(now.name);
+        }
+        if (same) return false;
+        mPrimeContinueAdapter.clear();
+        mPrimeContinueAdapter.addAll(0, entries);
+        return true;
+    }
+
+    /** After the player or a removal: refresh the cards and show or hide the row as needed. */
+    private void primeRefreshContinue() {
+        if (primeLoadContinue() && mLastAddedAdapter != null && mRowsAdapter != null) updateLastAddedRow(null);
+    }
+
+    /** Holding OK on a Continue watching card offers to take it off the home screen. */
+    private void primeAskRemoveContinue(com.archos.mediacenter.video.prime.stream.StreamProgress.Entry entry) {
+        Context c = mActivity != null ? mActivity : getContext();
+        if (c == null) return;
+        new android.app.AlertDialog.Builder(c)
+                .setTitle(entry.name)
+                .setItems(new CharSequence[]{
+                        getString(R.string.prime_continue_resume),
+                        getString(R.string.prime_continue_remove)}, (d, which) -> {
+                    if (which == 0) {
+                        primePlayContinue(c, entry);
+                    } else {
+                        com.archos.mediacenter.video.prime.stream.StreamProgress.hideFromHome(c, entry.url);
+                        primeRefreshContinue();
+                    }
+                })
+                .show();
+    }
+
+    static void primePlayContinue(Context c, com.archos.mediacenter.video.prime.stream.StreamProgress.Entry e) {
+        com.archos.mediacenter.video.prime.stream.StreamLink link =
+                com.archos.mediacenter.video.prime.stream.StreamLink.parse(e.url);
+        if (link == null) {
+            android.widget.Toast.makeText(c, R.string.prime_stream_invalid, android.widget.Toast.LENGTH_SHORT).show();
+            return;
+        }
+        com.archos.mediacenter.video.prime.stream.StreamBrowseFragment.startPlayer(c, link, e.url, e.name, e.position);
     }
 
     private void updateLastPlayedRow(Cursor cursor) {
@@ -1941,6 +2009,10 @@ public class MainFragment extends BrowseSupportFragment implements LoaderManager
                         WebUtils.openWebLink(vActivity,getString(R.string.sponsor_url));
                         break;
                 }
+            }
+            else if (item instanceof com.archos.mediacenter.video.prime.stream.StreamProgress.Entry) {
+                // Nova Player Plus: Continue watching card, resume where it stopped
+                primePlayContinue(vActivity, (com.archos.mediacenter.video.prime.stream.StreamProgress.Entry) item);
             }
             else {
                 super.onItemClicked(itemViewHolder, item, rowViewHolder, row);

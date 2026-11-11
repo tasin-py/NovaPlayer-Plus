@@ -99,4 +99,20 @@
     <string name="prime_stream_search_none">Nothing matches \"%1$s\"</string>
     <string name="prime_fix_audio_sync">Fix audio sync</string>
     <string name="prime_fix_audio_sync_running">Putting sound and picture back in step…</string>
+    <string name="prime_subsync">Sync subtitles automatically</string>
+    <string name="prime_subsync_listening">Listening to the dialogue to sync the subtitles… keep watching, this takes up to a minute</string>
+    <string name="prime_subsync_progress">Syncing subtitles… %1$d of %2$d</string>
+    <string name="prime_subsync_busy">Already syncing the subtitles…</string>
+    <string name="prime_subsync_choose">Choose a subtitle first</string>
+    <string name="prime_subsync_not_file">Automatic sync works with subtitle files (.srt, .ass, .vtt), not with subtitles built into the video or picture subtitles</string>
+    <string name="prime_subsync_unreadable">Couldn\'t read the timings in this subtitle file. Nothing was changed.</string>
+    <string name="prime_subsync_no_decoder">This TV can\'t decode this video\'s sound format for analysis (often DTS). Nothing was changed.</string>
+    <string name="prime_subsync_no_sound">Couldn\'t read the video\'s sound for analysis. Nothing was changed.</string>
+    <string name="prime_subsync_no_match">Couldn\'t match these subtitles to the dialogue (they may be for another version of the film). Nothing was changed.</string>
+    <string name="prime_subsync_already">Subtitles already match the dialogue</string>
+    <string name="prime_subsync_later">Subtitles synced: shown %1$s s later</string>
+    <string name="prime_subsync_earlier">Subtitles synced: shown %1$s s earlier</string>
+    <string name="prime_subsync_fps">(frame rate fixed too)</string>
+    <string name="prime_continue_resume">Resume</string>
+    <string name="prime_continue_remove">Remove from Recently added</string>
 </resources>

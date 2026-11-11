@@ -465,7 +465,7 @@ public class StreamBrowseFragment extends GuidedStepSupportFragment {
      * Starts NOVA's player on a stream link, from {@code positionMs} when it is above zero.
      * The link is added to the recent streams and its watched position is tracked.
      */
-    static void startPlayer(Context c, StreamLink link, String url, String name, int positionMs) {
+    public static void startPlayer(Context c, StreamLink link, String url, String name, int positionMs) {
         StreamHistory.add(c, url, name);
         StreamProgress.start(c, url, name, link.playUri.toString());
         if (log.isDebugEnabled()) log.debug("play: {} -> {} ({}) from {}", url, link.playUri, link.mimeType, positionMs);

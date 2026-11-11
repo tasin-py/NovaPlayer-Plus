@@ -52,14 +52,21 @@ public final class StreamProgress {
         public final int position;
         public final int duration;
         public final long time;
+        /** Removed from the home screen's Recently added row (still resumable on the Stream screen). */
+        public final boolean hiddenFromHome;
 
         Entry(String url, String name, String playUri, int position, int duration, long time) {
+            this(url, name, playUri, position, duration, time, false);
+        }
+
+        Entry(String url, String name, String playUri, int position, int duration, long time, boolean hiddenFromHome) {
             this.url = url;
             this.name = name;
             this.playUri = playUri;
             this.position = position;
             this.duration = duration;
             this.time = time;
+            this.hiddenFromHome = hiddenFromHome;
         }
 
         public boolean canResume() {
@@ -86,7 +93,7 @@ public final class StreamProgress {
                 long time = o.optLong("time", 0);
                 if (url.isEmpty() || time < cutoff) continue;
                 result.add(new Entry(url, o.optString("name", url), o.optString("play", url),
-                        o.optInt("pos", 0), o.optInt("dur", 0), time));
+                        o.optInt("pos", 0), o.optInt("dur", 0), time, o.optBoolean("hidden", false)));
             }
         } catch (JSONException ignored) {
             // unreadable: behave as empty
@@ -99,6 +106,23 @@ public final class StreamProgress {
         List<Entry> result = new ArrayList<>();
         for (Entry e : load(context)) if (e.canResume()) result.add(e);
         return result;
+    }
+
+    /** What the home screen shows: resumable and not removed from there. */
+    public static List<Entry> forHome(Context context) {
+        List<Entry> result = new ArrayList<>();
+        for (Entry e : resumable(context)) if (!e.hiddenFromHome) result.add(e);
+        return result;
+    }
+
+    /** Takes a video off the home screen only; watching it again brings it back. */
+    public static synchronized void hideFromHome(Context context, String url) {
+        List<Entry> entries = load(context);
+        for (int i = 0; i < entries.size(); i++) {
+            Entry e = entries.get(i);
+            if (e.url.equals(url)) entries.set(i, new Entry(e.url, e.name, e.playUri, e.position, e.duration, e.time, true));
+        }
+        save(context, entries);
     }
 
     public static Entry find(Context context, String url) {
@@ -180,7 +204,7 @@ public final class StreamProgress {
         for (Entry e : entries) {
             try {
                 array.put(new JSONObject().put("url", e.url).put("name", e.name).put("play", e.playUri)
-                        .put("pos", e.position).put("dur", e.duration).put("time", e.time));
+                        .put("pos", e.position).put("dur", e.duration).put("time", e.time).put("hidden", e.hiddenFromHome));
             } catch (JSONException ignored) {
             }
         }
