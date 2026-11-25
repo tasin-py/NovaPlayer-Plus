@@ -53,6 +53,66 @@ struct SUB_RENDERER {
     void            *change_ctx;
 };
 
+// Nova Player Plus: libass hands over one small bitmap per glyph layer (shadow, outline,
+// fill, per line), and the loop below used to re-upload ONE texture object and draw it once
+// per piece. On some TV GPUs (PowerVR on Realtek TCL TVs) re-specifying a texture that a
+// queued draw still uses crashes the driver inside glDrawArrays (SIGSEGV, null pointer),
+// killing the player the moment the first text subtitle appears. So text frames are now
+// composited on the CPU into a single bitmap (just the area the lines cover) and drawn with
+// one upload and one draw -- the same pattern picture subtitles (PGS) already use safely.
+// Returns a malloc'd tightly packed RGBA buffer (straight alpha) or NULL if nothing to draw.
+static uint8_t *flatten_text_frame(const SUB_FRAME *f, int *ox, int *oy, int *ow, int *oh) {
+    int cw = f->video_w, ch = f->video_h;
+    if (cw <= 0 || ch <= 0) return NULL;
+    int x0 = cw, y0 = ch, x1 = 0, y1 = 0;
+    for (const SUB_EVENT *ev = f->events; ev; ev = ev->next) {
+        if (ev->kind != SUB_EVENT_BITMAP || !ev->data.bitmap.rgba || ev->w <= 0 || ev->h <= 0) continue;
+        int ex0 = ev->x < 0 ? 0 : ev->x;
+        int ey0 = ev->y < 0 ? 0 : ev->y;
+        int ex1 = ev->x + ev->w > cw ? cw : ev->x + ev->w;
+        int ey1 = ev->y + ev->h > ch ? ch : ev->y + ev->h;
+        if (ex1 <= ex0 || ey1 <= ey0) continue;
+        if (ex0 < x0) x0 = ex0;
+        if (ey0 < y0) y0 = ey0;
+        if (ex1 > x1) x1 = ex1;
+        if (ey1 > y1) y1 = ey1;
+    }
+    if (x1 <= x0 || y1 <= y0) return NULL;
+    int bw = x1 - x0, bh = y1 - y0;
+    uint8_t *out = calloc((size_t)bw * bh, 4);
+    if (!out) return NULL;
+    for (const SUB_EVENT *ev = f->events; ev; ev = ev->next) {
+        if (ev->kind != SUB_EVENT_BITMAP || !ev->data.bitmap.rgba || ev->w <= 0 || ev->h <= 0) continue;
+        int stride = ev->data.bitmap.stride >= ev->w * 4 ? ev->data.bitmap.stride : ev->w * 4;
+        int sx0 = ev->x < x0 ? x0 - ev->x : 0;
+        int sy0 = ev->y < y0 ? y0 - ev->y : 0;
+        int sx1 = ev->x + ev->w > x1 ? x1 - ev->x : ev->w;
+        int sy1 = ev->y + ev->h > y1 ? y1 - ev->y : ev->h;
+        for (int y = sy0; y < sy1; y++) {
+            const uint8_t *src = ev->data.bitmap.rgba + (size_t)y * stride + (size_t)sx0 * 4;
+            uint8_t *dst = out + ((size_t)(ev->y + y - y0) * bw + (ev->x + sx0 - x0)) * 4;
+            for (int x = sx0; x < sx1; x++, src += 4, dst += 4) {
+                unsigned sa = src[3];
+                if (!sa) continue;
+                unsigned da = dst[3];
+                if (sa == 255 || !da) {
+                    dst[0] = src[0]; dst[1] = src[1]; dst[2] = src[2]; dst[3] = (uint8_t)sa;
+                    continue;
+                }
+                // "over" with straight alpha, in 0..255*255 units
+                unsigned dw = da * (255 - sa);          // destination weight
+                unsigned oa = sa * 255 + dw;            // = out alpha * 255
+                for (int c = 0; c < 3; c++) {
+                    dst[c] = (uint8_t)((src[c] * sa * 255 + dst[c] * dw + oa / 2) / oa);
+                }
+                dst[3] = (uint8_t)((oa + 127) / 255);
+            }
+        }
+    }
+    *ox = x0; *oy = y0; *ow = bw; *oh = bh;
+    return out;
+}
+
 static GLuint compile_shader(GLenum type, const char *source) {
     GLuint shader = glCreateShader(type);
     glShaderSource(shader, 1, &source, NULL);
@@ -316,9 +376,22 @@ static void* egl_render_thread(void* arg) {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+        // Nova Player Plus: text frame -> one flattened bitmap, one upload, one draw.
+        SUB_EVENT flat;
+        uint8_t *flat_rgba = NULL;
         SUB_EVENT *ev = frame_to_draw->events;
+        if (!(frame_to_draw->gfx_stream_w > 0 && frame_to_draw->gfx_stream_h > 0)) {
+            int fx = 0, fy = 0, fw = 0, fh = 0;
+            flat_rgba = flatten_text_frame(frame_to_draw, &fx, &fy, &fw, &fh);
+            memset(&flat, 0, sizeof(flat));
+            flat.kind = SUB_EVENT_BITMAP;
+            flat.x = fx; flat.y = fy; flat.w = fw; flat.h = fh;
+            flat.data.bitmap.rgba = flat_rgba;
+            flat.data.bitmap.stride = fw * 4;
+            ev = flat_rgba ? &flat : NULL;
+        }
         while (ev) {
-            if (ev->kind == SUB_EVENT_BITMAP) {
+            if (ev->kind == SUB_EVENT_BITMAP && ev->data.bitmap.rgba && ev->w > 0 && ev->h > 0) {
                 glBindTexture(GL_TEXTURE_2D, r->gl_texture);
                 glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
@@ -369,9 +442,13 @@ static void* egl_render_thread(void* arg) {
 
                 glDisableVertexAttribArray(attrib_pos);
                 glDisableVertexAttribArray(attrib_tex);
+                // Nova Player Plus: finish this draw before the same texture is re-uploaded
+                // for the next piece (multi-region picture subtitles) -- see flatten_text_frame().
+                if (ev->next) glFinish();
             }
             ev = ev->next;
         }
+        free(flat_rgba);
         glDisable(GL_BLEND);
             }
 
