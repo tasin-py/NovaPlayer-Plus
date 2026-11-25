@@ -101,6 +101,7 @@ Stop a streamed video part way and Nova Player Plus remembers where you were.
 
 ### 8️⃣ Player extras
 - **Sync subtitles automatically** (player menu › **Subtitles**): listens to the dialogue in a few short stretches of the movie and lines the subtitles up with it, usually in under a minute. It also spots subtitles made for a different frame rate, which drift further out over the film, and corrects those too. It sets NOVA's normal subtitle delay, so you can still fine-tune it by hand, and changes nothing if it isn't sure of the match. Works with subtitle files (.srt, .ass, .vtt), including ones from *Get subtitles online*
+- **Subtitles that don't crash the player:** on some TVs (TCL and others with a PowerVR graphics chip), NOVA's player crashed a moment after a text subtitle (.srt, .ass) appeared. Nova Player Plus draws subtitles in a way those TVs handle safely
 - **Fix audio sync** (player menu › **Audio**): if the sound drifts out of step after a network hiccup or a seek, one press reopens the video at the same spot and puts it back in sync
 
 ### 9️⃣ One-click updates
